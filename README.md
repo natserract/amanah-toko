@@ -1,5 +1,5 @@
 # Amanah Toko
-Accounting desktop app
+Desktop accounting app
 
 ## Setup
 1. Install dependencies:
