@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, session } from 'electron';
 import logger from 'electron-log';
 import { isMainWindow, openBoxHero } from './window';
 import { isMac } from './envs';
@@ -34,6 +34,22 @@ app.on('ready', async () => {
   //     callback({ cancel: false, requestHeaders: details.requestHeaders });
   //   }
   // );
+
+  // Cors enabled
+  session.defaultSession.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    },
+  );
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
 
 
   const appVersion = app.getVersion();

@@ -38,10 +38,11 @@
     "webpack": "4.44.2",
     "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "4.0.0",
-    "webpack-dev-server": "3.11.0",
+    "webpack-dev-server": "3.11.1",
     "concurrently": "^6.3.0"
   },
   "scripts": {
+    "setup-dependencies": "yarn install && cd backend && yarn install && cd frontend && yarn install",
     "postinstall": "electron-builder install-app-deps",
     "clean": "rm -rf out dist",
     "compile": "webpack && tsc",

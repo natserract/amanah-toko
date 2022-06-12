@@ -13,6 +13,7 @@ import {router} from "./api/routes/index.js";
 import { normalizePort, onError, onListening, errorHandler, handle404 } from "./appHelper.js";
 import db from "./models/index.js";
 import vhost from 'vhost'
+import cors from 'cors'
 
 function createVirtualHost(domainName: string | RegExp, dirPath: string) {
   return vhost(domainName, express.static( dirPath ));
@@ -58,6 +59,8 @@ try {
 
 // @ts-ignore
 app.use(logger("dev"));
+
+app.use(cors());
 
 // @ts-ignore
 app.use(helmet());
