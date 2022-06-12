@@ -1,34 +1,39 @@
-import { Dialect, Sequelize } from "sequelize";
-import "dotenv/config";
+/* eslint-disable no-var */
+import { Dialect, Sequelize } from 'sequelize';
+import 'dotenv/config';
 
-let sequelize: Sequelize;
-const env = process.env.NODE_ENV as "development" | "test" | "production";
+var sequelize: Sequelize;
+const env = process.env.NODE_ENV as 'development' | 'test' | 'production';
 
-if (env === "production") {
+export var DB_NAME = process.env.DB_NAME as string;
+export const DB_USERNAME = process.env.DB_USER as string;
+export const DB_HOST = process.env.DB_HOST as string;
+export const DB_PASSWORD = process.env.DB_PASSWORD as string;
+export const DB_DIALECT = process.env.DB_DIALECT as Dialect;
+
+if (env === 'production') {
   const useEnvVariable = process.env.DATABASE_URL as string;
   const productionConfig = {
-    "dialect": "postgres" as Dialect,
-    "dialectOptions": {
-      "ssl": {
-        rejectUnauthorized: false
+    dialect: 'postgres' as Dialect,
+    dialectOptions: {
+      ssl: {
+        rejectUnauthorized: false,
       },
     },
-    "logging": false,
-  }
+    logging: false,
+  };
   sequelize = new Sequelize(useEnvVariable, productionConfig);
 } else {
-  let dbName = "";
-  const dbUser = process.env.DB_USER as string;
-  const dbHost = process.env.DB_HOST as string;
-  const dbPassword = process.env.DB_PASSWORD as string;
-  const dbDialect = process.env.DB_DIALECT as Dialect;
+  if (env === 'development') {
+    DB_NAME = process.env.DB_NAME as string;
+  }
+  if (env === 'test') {
+    DB_NAME = process.env.TEST_DB_NAME as string;
+  }
 
-  if (env === "development") { dbName = process.env.DB_NAME as string; }
-  if (env === "test") { dbName = process.env.TEST_DB_NAME as string; }
-
-  sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    dialect: dbDialect,
+  sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: DB_DIALECT,
   });
 }
 

@@ -1,12 +1,14 @@
 {
-  "apps": [{
-      "name" : "amanahtoko-server",
-      "script" : "yarn nodemon dist/app.js",
-      "env" : {
-        "PORT" : 5000
+  "apps": [
+    {
+      "name": "amanahtoko-server",
+      "script": "yarn nodemon dist/app.js",
+      "env": {
+        "PORT": 5000
       },
-      "env_production" : {
-        "PORT" : 5000
+      "env_production": {
+        "PORT": 5000
       }
-  }]
+    }
+  ]
 }
