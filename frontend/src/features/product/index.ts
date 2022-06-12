@@ -1,3 +1,3 @@
-export {ProductsList} from "./ProductsList";
-export {AddProductForm} from "./AddProductForm";
-export {EditProductForm} from "./EditProductForm";
+export { ProductsList } from './ProductsList';
+export { AddProductForm } from './AddProductForm';
+export { EditProductForm } from './EditProductForm';

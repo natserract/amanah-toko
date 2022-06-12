@@ -1,5 +1,5 @@
 export interface ActionsProps {
-    checked: { [k: string]: boolean };
-    title: string;
-    handleDestroy: () => void;
+  checked: { [k: string]: boolean };
+  title: string;
+  handleDestroy: () => void;
 }

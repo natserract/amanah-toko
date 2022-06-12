@@ -3,8 +3,16 @@
  * @param obj
  */
 export function generateQuery(obj: { [k: string]: string | number }) {
-    return "?" + Object.entries(obj).map( ([key, value]) => {
-        if (value) { return `${key}=${value}` }
+  return (
+    '?' +
+    Object.entries(obj)
+      .map(([key, value]) => {
+        if (value) {
+          return `${key}=${value}`;
+        }
         return undefined;
-    }).filter( (value) => value !== undefined ).join("&");
+      })
+      .filter((value) => value !== undefined)
+      .join('&')
+  );
 }

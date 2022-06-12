@@ -1,2 +1,2 @@
-export {TransfersList} from "./TransfersList";
-export {AddTransferForm} from "./AddTransferForm";
+export { TransfersList } from './TransfersList';
+export { AddTransferForm } from './AddTransferForm';

@@ -1,1 +1,3 @@
-export interface ButtonSpinnerProps { text?: string | null }
+export interface ButtonSpinnerProps {
+  text?: string | null;
+}
