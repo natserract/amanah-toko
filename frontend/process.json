@@ -1,0 +1,12 @@
+{
+  "apps": [{
+      "name" : "amanahtoko-client",
+      "script" : "serve -l tcp://amanahtoko.local:3001 -s build",
+      "env" : {
+        "PORT" : 3001
+      },
+      "env_production" : {
+        "PORT" : 3001
+      }
+  }]
+}
