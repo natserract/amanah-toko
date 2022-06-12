@@ -13,3 +13,12 @@ Desktop accounting app
 2. This app using custom host, (e.g: amanahtoko.local )
     - (Mac): edit host in `/etc/hosts`, 
     - (Windows): search on google
+
+
+## Works:
+- [] Invoices
+- [] Changes language to Bahasa Indo
+- [] Change model schema for product,
+- [] Reports (if possible)
+
+References: [akaunting](https://app.akaunting.com/204083/)
