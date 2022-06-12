@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { default as express } from "express";
 import session from "express-session";
 import { default as cookieParser } from "cookie-parser";
@@ -11,21 +12,32 @@ import { Request, Response } from "express";
 import {router} from "./api/routes/index.js";
 import { normalizePort, onError, onListening, errorHandler, handle404 } from "./appHelper.js";
 import db from "./models/index.js";
+import vhost from 'vhost'
 
+function createVirtualHost(domainName: string | RegExp, dirPath: string) {
+  return vhost(domainName, express.static( dirPath ));
+}
+
+export const __filename = url.fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
+
+const appHost = createVirtualHost(
+  "www.amanahtoko.local",
+  path.join(__dirname, "..", "build", "static"
+))
 
 export const app = express();
 export const port = normalizePort(process.env.PORT || "5000");
 app.set("port", port);
+app.set("host", appHost)
 
 export const server = http.createServer(app);
 server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://amanahtoko.local:%d: in %s mode`, port, app.settings.env);
 });
 server.on("error", onError);
 server.on("listening", onListening);
 
-export const __filename = url.fileURLToPath(import.meta.url);
-export const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -46,6 +58,7 @@ try {
 
 // @ts-ignore
 app.use(logger("dev"));
+
 // @ts-ignore
 app.use(helmet());
 // @ts-ignore
