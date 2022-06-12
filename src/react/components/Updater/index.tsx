@@ -13,7 +13,7 @@ const Updater: React.FC = () => {
   return (
     <Container>
       <Logo src="../static/symbol.svg" alt="logo" />
-      <AppName>BoxHero</AppName>
+      <AppName>Amanah Toko</AppName>
       <VersionText>Version {currentVersion}</VersionText>
       {progressStat && updateStat !== 'update-downloaded' ? (
         <DownloadProgress percent={progressStat.percent} />

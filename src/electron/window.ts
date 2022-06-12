@@ -24,7 +24,7 @@ export const openBoxHero = () => {
     ...(mainWindows.length > 0 ? getNextPosition() : prevWindowState.position),
     minWidth: 1000,
     minHeight: 562,
-    title: 'BoxHero',
+    title: 'Amanah Toko',
     webPreferences: {
       contextIsolation: false,
       devTools: isDev,

@@ -1,0 +1,6 @@
+version: 1.15.0
+provider: 'github'
+private: false
+owner: 'frappe'
+repo: "books"
+token: "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"

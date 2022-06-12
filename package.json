@@ -38,7 +38,8 @@
     "webpack": "4.44.2",
     "webpack-bundle-analyzer": "3.9.0",
     "webpack-cli": "4.0.0",
-    "webpack-dev-server": "3.11.0"
+    "webpack-dev-server": "3.11.0",
+    "concurrently": "^6.3.0"
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -47,8 +48,8 @@
     "watch-ts": "tsc -w",
     "watch-webpack": "NODE_ENV=development webpack -w",
     "watch-electron": "nodemon -w out --exec 'NODE_ENV=development electron .'",
-    "watch": "./watch.sh",
-    "build": "yarn run compile",
+    "watch": "concurrently  \"rm -rf out \" \"yarn watch-ts\" \"yarn watch-webpack\"",
+    "build": "rm -rf out && yarn run compile",
     "release": "yarn run clean && yarn run compile && electron-builder --mac --windows --publish always"
   },
   "repository": {

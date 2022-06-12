@@ -1,4 +1,4 @@
-import { app, session } from 'electron';
+import { app } from 'electron';
 import logger from 'electron-log';
 import { isMainWindow, openBoxHero } from './window';
 import { isMac } from './envs';
@@ -12,20 +12,29 @@ import { initUpdateIPC } from './ipc/initUpdateIPC';
 logger.catchErrors();
 logger.transports.file.level = 'info';
 
-logger.log('App starting..');
+logger.log('App starting!..');
 
-app.on('ready', () => {
+app.on('ready', async () => {
+  // const { stdout, stderr } = await exec('nvm use 16.14 && yarn nodemon backend/dist/app.js');
+  // stdout?.on('data', (data) => {
+  //   console.log('stdout:', data);
+  // })
+  // console.error('stderr:', stderr);
+
+  // exec("nvm use 16.14 && yarn nodemon backend/dist/app.js")
+  // logger.log('connected', run.connected)
   /* 구글 인증 페이지에서만 요청 헤더 중 userAgent를 크롬으로 변경해 전송한다.
    * 구글 인증이 안되는 문제에 대한 미봉책.
    * 해결책 링크 : https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
    * */
-  session.defaultSession.webRequest.onBeforeSendHeaders(
-    { urls: ['https://accounts.google.com/*'] },
-    (details, callback) => {
-      details.requestHeaders['User-Agent'] = 'Chrome';
-      callback({ cancel: false, requestHeaders: details.requestHeaders });
-    }
-  );
+  // session.defaultSession.webRequest.onBeforeSendHeaders(
+  //   { urls: ['https://accounts.google.com/*'] },
+  //   (details, callback) => {
+  //     details.requestHeaders['User-Agent'] = 'Chrome';
+  //     callback({ cancel: false, requestHeaders: details.requestHeaders });
+  //   }
+  // );
+
 
   const appVersion = app.getVersion();
 
