@@ -7,4 +7,6 @@ export const emptySplitApi = createApi({
   }),
   tagTypes: ['Category', 'Product', 'Purchase', 'Sale', 'Supplier', 'Transfer'],
   endpoints: () => ({}),
+  refetchOnMountOrArgChange: true,
+  keepUnusedDataFor: 10,
 });

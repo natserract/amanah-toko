@@ -32,7 +32,7 @@ async function sales(req: Request, res: Response, next: NextFunction) {
 
 async function create(req: Request, res: Response) {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, description } = req.body;
     const product = await Product.findByPk(productId);
     if (product === null) {
       return res.status(400).json({
@@ -45,8 +45,18 @@ async function create(req: Request, res: Response) {
     }
 
     return await sequelize.transaction(async (t) => {
+      const totalPrice = product.dataValues!.unitPrice * quantity;
+      const { count } = await Sale.findAndCountAll({
+        distinct: true,
+        include: {
+          model: Product,
+          as: 'product',
+        },
+      });
+      const invoiceNo = String(count + 1);
+
       const sale = await Sale.create(
-        { productId, quantity },
+        { productId, quantity, totalPrice, description, invoiceNo },
         { transaction: t }
       );
       // deduct quantity items from product
@@ -132,7 +142,7 @@ async function read(req: Request, res: Response, next: NextFunction) {
 
 async function update(req: Request, res: Response) {
   try {
-    const { id, quantity } = req.body;
+    const { id, quantity, description } = req.body;
     const sale = await Sale.findByPk(id);
     if (sale === null) {
       return res.status(400).json({
@@ -157,6 +167,8 @@ async function update(req: Request, res: Response) {
       const store =
         product.dataValues!.store + sale.dataValues!.quantity - quantity;
 
+     const totalPrice = product.dataValues!.unitPrice * quantity;
+
       const [affectedProductRows] = await Product.update(
         { store },
         {
@@ -165,7 +177,7 @@ async function update(req: Request, res: Response) {
         }
       );
       const [affectedSaleRows] = await Sale.update(
-        { quantity },
+        { quantity, description, totalPrice },
         {
           where: { id },
           transaction: t,

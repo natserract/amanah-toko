@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 
 import { useAddNewSaleMutation } from './salesSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select } from '../../app/form/fields';
+import { Input, Select, TextArea} from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import SaleSchema from './SaleSchema';
@@ -15,6 +15,13 @@ export const AddSaleForm = () => {
   const [message, setMessage] = useState<Message | null>(null);
   const [addNewSale] = useAddNewSaleMutation();
   const allProducts = useGetProductsQuery('?limit=all');
+
+  const initialValues = {
+    productId: '',
+    quantity: '',
+    description: '',
+  }
+
   const products = useMemo(() => {
     if (allProducts.isSuccess && allProducts.data.products) {
       return allProducts.data.products.map((product: Product) => ({
@@ -34,7 +41,7 @@ export const AddSaleForm = () => {
 
   const form = (
     <Formik
-      initialValues={{ productId: '', quantity: '' }}
+      initialValues={initialValues}
       validationSchema={SaleSchema}
       onSubmit={async (values, actions) => {
         try {
@@ -72,18 +79,23 @@ export const AddSaleForm = () => {
           <form onSubmit={props.handleSubmit}>
             <Select
               name="productId"
-              label="Select product"
+              label="Pilih Produk"
               options={products}
               required={true}
             >
-              <option value="">Select a product</option>
+              <option value="">Pilih Produk</option>
             </Select>
             <Input
               name="quantity"
-              label="Quantity"
+              label="Jumlah"
               type="number"
-              placeholder="Enter quantity"
+              placeholder="Masukkan Jumlah Barang"
               required={true}
+            />
+            <TextArea
+              name="description"
+              label="Deskripsi"
+              placeholder="Masukkan Deskripsi Barang"
             />
 
             <button
@@ -91,7 +103,7 @@ export const AddSaleForm = () => {
               className="btn btn-primary rounded-0 me-2 mt-3"
               disabled={props.isSubmitting}
             >
-              {props.isSubmitting ? <ButtonSpinner text="Adding" /> : 'Add'}
+              {props.isSubmitting ? <ButtonSpinner text="Menambahkan" /> : 'Tambah'}
             </button>
           </form>
         </>
@@ -101,7 +113,7 @@ export const AddSaleForm = () => {
 
   return (
     <FormCard
-      title="Add Sale"
+      title="Tambah Penjualan"
       message={message}
       setMessage={setMessage}
       cardBody={form}

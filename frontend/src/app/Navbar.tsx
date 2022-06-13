@@ -33,14 +33,14 @@ export default function Navbar() {
             </li>
 
             <li className="nav-item">
-              <NavLink to="/purchases" className="nav-link text-white">
-                Pembelian (Barang Masuk)
+              <NavLink to="/sales" className="nav-link text-white">
+                Penjualan
               </NavLink>
             </li>
 
             <li className="nav-item">
-              <NavLink to="/sales" className="nav-link text-white">
-                Penjualan(Barang Keluar)
+              <NavLink to="/purchases" className="nav-link text-white">
+                Pembelian
               </NavLink>
             </li>
 

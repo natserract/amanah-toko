@@ -9,7 +9,7 @@ import {
   useDestroySaleMutation,
 } from './salesSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select } from '../../app/form/fields';
+import { Input, Select, TextArea } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import Modal from '../../app/modal/Modal';
 import Spinner from '../../app/spinners/Spinner';
@@ -17,6 +17,7 @@ import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import SaleSchema from './SaleSchema';
 import { Message } from '../../app/index';
 import { Product } from '../api';
+import { formatDate } from '../../utils/format';
 
 type TParams = { saleId: string };
 
@@ -24,10 +25,21 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
   const { saleId } = match.params;
   const [message, setMessage] = useState<Message | null>(null);
   const result = useGetSaleQuery(saleId);
+
   const [updateSale] = useEditSaleMutation();
   const [cancelSale] = useCancelSaleMutation();
   const [destroySale] = useDestroySaleMutation();
   const allProducts = useGetProductsQuery('?limit=all');
+
+  const invoiceDate = useMemo(() => {
+    if (result?.data?.sale) {
+      const { createdAt }  = result.data.sale
+      return formatDate(createdAt)
+    }
+
+    return '-'
+  }, [result])
+
   const products = useMemo(() => {
     if (allProducts.isSuccess && allProducts.data.products) {
       return allProducts.data.products.map((product: Product) => ({
@@ -37,13 +49,16 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [allProducts.isSuccess, allProducts.data?.products]);
+
   const initialValues = useMemo(() => {
     if (result.isSuccess && result.data.sale) {
+      console.log('result.data.sale', result.data.sale)
       return { ...result.data.sale };
     } else {
-      return { productId: '', quantity: '' };
+      return { productId: '', quantity: '', description: '', };
     }
   }, [result.isSuccess, result.data?.sale]);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -144,18 +159,29 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
             <form onSubmit={props.handleSubmit}>
               <Select
                 name="productId"
-                label="Select product"
+                label="Pilih Produk"
                 options={products}
                 required={true}
               >
-                <option value="">Select a product</option>
+                <option value="">Pilih Produk</option>
               </Select>
               <Input
                 name="quantity"
-                label="Quantity"
+                label="Jumlah"
                 type="number"
-                placeholder="Enter quantity"
+                placeholder="Masukkan Jumlah Barang"
                 required={true}
+              />
+              <TextArea
+                name="description"
+                label="Deskripsi"
+                placeholder="Masukkan Deskripsi Barang"
+              />
+              <Input
+                name="createdAt"
+                value={invoiceDate}
+                readOnly
+                label="Tanggal"
               />
 
               <button
@@ -164,7 +190,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
                 disabled={props.isSubmitting}
               >
                 {props.isSubmitting ? (
-                  <ButtonSpinner text="Updating" />
+                  <ButtonSpinner text="Mengupdate" />
                 ) : (
                   'Update'
                 )}
@@ -176,7 +202,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#cancelSale"
               >
-                Cancel
+                Batal
               </button>
 
               <button
@@ -185,7 +211,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#deleteSale"
               >
-                Delete
+                Hapus
               </button>
             </form>
           )}
@@ -197,7 +223,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
   return (
     <>
       <FormCard
-        title="Edit Sale"
+        title="Edit Penjualan"
         message={message}
         setMessage={setMessage}
         cardBody={form}
@@ -206,18 +232,18 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
       <Modal
         id="deleteSale"
         label="deleteSaleLabel"
-        title="Delete Sale"
-        body="Are you sure you want to delete this sale? This action cannot be undone."
+        title="Hapus Penjualan"
+        body="Apakah Anda yakin ingin menghapus penjualan ini? Aksi ini tidak bisa di undo."
         handleAction={handleDestroy}
       />
 
       <Modal
         id="cancelSale"
         label="cancelSaleLabel"
-        title="Cancel Sale"
-        body="Are you sure you want to cancel this sale? This action cannot be undone."
+        title="Batalkan Penjualan"
+        body="Apakah Anda yakin ingin membatalkan penjualan ini? Aksi ini tidak bisa di undo."
         handleAction={handleCancel}
-        actionLabel="Cancel"
+        actionLabel="Submit"
       />
     </>
   );

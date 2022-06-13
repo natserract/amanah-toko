@@ -14,12 +14,15 @@ import { Models } from './types.js';
 interface SaleAttributes {
   id: string;
   quantity: number;
+  description?: string;
+  invoiceNo?: string;
+  totalPrice?: number;
 
   // foreign key
   productId?: string;
 }
 
-type SaleCreationAttributes = Optional<SaleAttributes, 'id'>;
+type SaleCreationAttributes = Optional<SaleAttributes, 'id' | 'totalPrice' | 'invoiceNo'>;
 
 export class Sale
   extends Model<SaleAttributes, SaleCreationAttributes>
@@ -27,6 +30,9 @@ export class Sale
 {
   declare id: string;
   declare quantity: number;
+
+  invoiceNo?: string;
+  totalPrice?: number;
 
   // timestamps
   declare readonly createdAt: Date;
@@ -71,10 +77,26 @@ export const SaleFactory = (sequelize: Sequelize) => {
         unique: true,
         allowNull: false,
       },
-      quantity: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      invoiceNo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        defaultValue: 0,
+      },
+      totalPrice: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        unique: false,
+        allowNull: true,
       },
     },
     {

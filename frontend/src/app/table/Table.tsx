@@ -73,7 +73,7 @@ export default function Table({
   };
 
   const renderTd = (item: any) => {
-    return cols.map((col) => {
+    return cols.map((col, index) => {
       let label = '';
       let tdChild: JSX.Element;
 
@@ -96,7 +96,7 @@ export default function Table({
       }
 
       return (
-        <td key={`${col.accessor}${item.id}`} className="text-left">
+        <td key={`${col.accessor}${item.id}-${index}`} className="text-left">
           {tdChild}
         </td>
       );

@@ -9,9 +9,9 @@ import { Product } from '../api';
 const SalesSearchForm = () => (
   <Input
     name="product"
-    label="Product"
+    label="Barang"
     type="search"
-    placeholder="Enter product name"
+    placeholder="Masukkan Nama Barang"
     inline={true}
     validation={false}
   />
@@ -25,18 +25,26 @@ export const SalesList = React.memo(() => {
   const cols = useMemo(
     () => [
       {
-        name: '',
-        accessor: 'id',
-        link: '/sales/:id',
-        callback: (id: string) => 'Edit',
+        name: 'Invoice No',
+        accessor: 'invoiceNo',
+        link: "/sales/:id",
+        callback: (value: string) => `INV-${value}`
       },
       {
-        name: 'Product',
+        name: 'Barang',
         accessor: 'product',
         link: '/products/:productId',
         callback: (product: Product) => product.name,
       },
-      { name: 'Quantity', accessor: 'quantity' },
+      { name: 'Jumlah', accessor: 'quantity' },
+      { name: 'Total', accessor: 'totalPrice', type: "price" },
+      { name: 'Tanggal', accessor: 'createdAt', type: 'date' },
+      {
+         name: 'Invoice',
+         accessor: '',
+         link: "/sales/invoice/:id",
+         callback: (id: string) => 'Lihat Invoice'
+      },
     ],
     []
   );
@@ -92,7 +100,7 @@ export const SalesList = React.memo(() => {
           ? result.data.pagination
           : { count: 0 }
       }
-      title="Sales"
+      title="Penjualan (Barang Keluar)"
       message={message}
       setMessage={setMessage}
       createItemLink="/sales/create"

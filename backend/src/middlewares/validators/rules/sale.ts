@@ -5,6 +5,7 @@ import { read } from './libs/read.js';
 import filters from './libs/filters.js';
 import { queryWithFilter } from './libs/queryWithFilter.js';
 import { db } from '../../../models';
+import { description } from './libs/description.js';
 
 const Op = Sequelize.Op;
 const { Product, Sale } = db;
@@ -47,7 +48,25 @@ export const saleRules = {
         }
         return true;
       }),
+
+    // body('invoiceNo')
+    //   .trim()
+    //   .escape()
+    //   .notEmpty()
+    //   .withMessage('Invoice no is required')
+    //   .bail(),
+
+    // body('totalPrice')
+    //   .trim()
+    //   .escape()
+    //   .notEmpty()
+    //   .withMessage('Total price is required')
+    //   .isFloat({ min: 1.0 })
+    //   .withMessage('Total price must be greater than 1.00')
+    //   .toFloat(),
+
     quantity,
+    description,
   ],
 
   read: [read('Sale')],
