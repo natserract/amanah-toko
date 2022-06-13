@@ -48,7 +48,6 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
         unitCost: '',
         unitPrice: '',
         store: '',
-        counter: '',
         description: '',
         categoryId: '',
       };
@@ -133,48 +132,41 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
             <form onSubmit={props.handleSubmit}>
               <Input
                 name="name"
-                label="Name"
+                label="Nama"
                 type="text"
-                placeholder="Enter product name"
+                placeholder="Masukkan Nama Barang"
                 required={true}
               />
-              <Input
+               <Input
                 name="unitCost"
-                label="Unit cost"
+                label="Harga Beli"
                 type="number"
-                placeholder="Enter product unit cost"
+                placeholder="Masukkan Harga Pembelian"
                 required={true}
               />
               <Input
                 name="unitPrice"
-                label="Unit price"
+                label="Harga Jual"
                 type="number"
-                placeholder="Enter product unit price"
+                placeholder="Masukkan Harga Jual"
                 required={true}
               />
               <Input
                 name="store"
-                label="Store"
+                label="Jumlah Barang"
                 type="number"
-                placeholder="Enter number of items in store"
-                required={true}
-              />
-              <Input
-                name="counter"
-                label="Counter"
-                type="number"
-                placeholder="Enter number of items in counter"
+                placeholder="Masukkan Jumlah Barang"
                 required={true}
               />
               <Select
                 name="categoryId"
-                label="Select category"
+                label="Kategori"
                 options={categories}
                 required={true}
               >
-                <option value="">Select a category</option>
+                <option value="">Pilih Kategori</option>
               </Select>
-              <TextArea name="description" label="Description" />
+              <TextArea name="description" label="Deskripsi" />
 
               <button
                 type="submit"
@@ -182,7 +174,7 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
                 disabled={props.isSubmitting}
               >
                 {props.isSubmitting ? (
-                  <ButtonSpinner text="Updating" />
+                  <ButtonSpinner text="Mengupdate" />
                 ) : (
                   'Update'
                 )}
@@ -194,7 +186,7 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#deleteProduct"
               >
-                Delete
+                Hapus
               </button>
             </form>
           )}

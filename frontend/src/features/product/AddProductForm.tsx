@@ -21,7 +21,6 @@ export const AddProductForm = () => {
     unitCost: '',
     unitPrice: '',
     store: '',
-    counter: '',
     description: '',
     categoryId: '',
   };
@@ -105,30 +104,23 @@ export const AddProductForm = () => {
             />
             <Input
               name="store"
-              label="Store"
+              label="Jumlah Barang"
               type="number"
-              placeholder="Enter number of items in store"
-              required={true}
-            />
-            <Input
-              name="counter"
-              label="Counter"
-              type="number"
-              placeholder="Enter number of items in counter"
+              placeholder="Masukkan Jumlah Barang"
               required={true}
             />
             <Select
               name="categoryId"
-              label="Select category"
+              label="Kategori"
               options={categories}
               required={true}
             >
-              <option value="">Select a category</option>
+              <option value="">Pilih Kategori</option>
             </Select>
             <TextArea
               name="description"
-              label="Description"
-              placeholder="Enter a description for the product"
+              label="Deskripsi"
+              placeholder="Masukkan Deskripsi Barang"
             />
 
             <button
@@ -136,7 +128,7 @@ export const AddProductForm = () => {
               className="btn btn-primary rounded-0 me-2 mt-3"
               disabled={props.isSubmitting}
             >
-              {props.isSubmitting ? <ButtonSpinner text="Adding" /> : 'Add'}
+              {props.isSubmitting ? <ButtonSpinner text="Menambahkan" /> : 'Tambah'}
             </button>
           </form>
         </>

@@ -4,7 +4,7 @@ import { destroy } from './libs/destroy.js';
 import { read } from './libs/read.js';
 import filters from './libs/filters.js';
 import { queryWithFilter } from './libs/queryWithFilter.js';
-import { db } from 'src/models/index.js';
+import { db } from '../../../models';
 
 const Op = Sequelize.Op;
 const { Product, Sale } = db;

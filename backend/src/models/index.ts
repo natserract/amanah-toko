@@ -5,9 +5,10 @@ import { PurchaseFactory } from './purchase.js';
 import { SaleFactory } from './sale.js';
 import { SupplierFactory } from './supplier.js';
 import { TransferFactory } from './transfer.js';
-import { Db } from './types';
+import { Db, Models } from './types';
 
-export const models: any = {
+// eslint-disable-next-line no-var
+var models: any = {
   Category: CategoryFactory(sequelize),
   Product: ProductFactory(sequelize),
   Purchase: PurchaseFactory(sequelize),
@@ -18,9 +19,9 @@ export const models: any = {
 
 export const initModel = async (withoutSync = false) => {
   // Create model associations
-  Object.keys(models).forEach((modelKey) => {
-    if ('associate' in models[modelKey].prototype) {
-      models[modelKey].prototype.associate(models);
+  Object.keys(models as Models).forEach((modelKey) => {
+    if ('associate' in models[modelKey]) {
+      models[modelKey].associate(models);
     }
   });
 

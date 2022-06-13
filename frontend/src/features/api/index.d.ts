@@ -20,7 +20,6 @@ export interface DraftProduct {
   unitCost: string | number;
   unitPrice: string | number;
   store: string | number;
-  counter: string | number;
   description?: string;
 }
 

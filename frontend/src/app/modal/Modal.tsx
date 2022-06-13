@@ -49,11 +49,10 @@ export default function Modal({
   );
 
   return (
-    // @ts-ignore
     <div
       className="modal fade"
       id={id}
-      tabIndex="-1"
+      tabIndex={-1}
       aria-labelledby={label}
       aria-hidden="true"
     >

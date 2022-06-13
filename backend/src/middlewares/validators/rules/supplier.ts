@@ -4,7 +4,7 @@ import { read } from './libs/read.js';
 import itemExists from './libs/itemExists.js';
 import toTitleCase from '../../../libs/toTitleCase.js';
 import filters from './libs/filters.js';
-import { db } from 'src/models/index.js';
+import { db } from '../../../models';
 
 const { Supplier } = db;
 

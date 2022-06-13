@@ -8,7 +8,7 @@ import { description } from './libs/description.js';
 import toTitleCase from '../../../libs/toTitleCase.js';
 import filters from './libs/filters.js';
 import { queryWithFilter } from './libs/queryWithFilter.js';
-import { db } from 'src/models/index.js';
+import { db } from '../../../models';
 
 const Op = Sequelize.Op;
 const { Category, Product } = db;

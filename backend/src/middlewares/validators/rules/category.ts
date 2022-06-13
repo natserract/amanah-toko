@@ -5,7 +5,7 @@ import itemExists from './libs/itemExists.js';
 import { description } from './libs/description.js';
 import toTitleCase from '../../../libs/toTitleCase.js';
 import filters from './libs/filters.js';
-import { db } from 'src/models/index.js';
+import { db } from '../../../models';
 
 const { Category } = db;
 

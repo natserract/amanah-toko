@@ -35,12 +35,6 @@ export const ProductSchema = Yup.object().shape({
     .positive('Items in store cannot be negative')
     .integer('Items in store must be an integer'),
 
-  counter: Yup.number()
-    .typeError('Please provide a valid number for items in counter')
-    .required('Number of items in counter is required')
-    .positive('Items in counter cannot be negative')
-    .integer('Items in counter must be an integer'),
-
   description: Yup.string()
     .min(5, 'Description should be at least 5 characters long')
     .max(255, 'Description should not exceed 255 characters'),

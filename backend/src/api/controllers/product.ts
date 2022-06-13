@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { db } from 'src/models';
+import { db } from '../../models';
 
 const { Product, Category } = db;
 

@@ -27,8 +27,7 @@ export const ProductsList = React.memo(() => {
       { name: 'Nama', accessor: 'name', link: '/products/:id' },
       { name: 'Harga Beli', accessor: 'unitCost' },
       { name: 'Harga Jual', accessor: 'unitPrice' },
-      { name: 'Store', accessor: 'store' },
-      { name: 'Counter', accessor: 'counter' },
+      { name: 'Jumlah Stok', accessor: 'store' },
       {
         name: 'Kategori',
         accessor: 'category',
