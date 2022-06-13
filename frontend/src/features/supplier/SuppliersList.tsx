@@ -43,7 +43,7 @@ export const SuppliersList = React.memo(() => {
     if (result.data?.error) {
       setMessage({ type: 'danger', message: result.data.error });
     }
-  }, [result.data?.error]);
+  }, [result.data, result.data?.error]);
 
   const handleQuery = useCallback((query: string) => {
     if (query.length) {

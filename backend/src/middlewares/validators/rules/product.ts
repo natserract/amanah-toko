@@ -55,8 +55,6 @@ const commonRules = [
     .escape()
     .notEmpty()
     .withMessage('Unit cost is required')
-    .isDecimal({ decimal_digits: '1,2' })
-    .withMessage('Unit cost must not exceeding 2 decimal places')
     .isFloat({ min: 1.0 })
     .withMessage('Unit cost must be greater than 1.00')
     .toFloat(),
@@ -66,8 +64,6 @@ const commonRules = [
     .escape()
     .notEmpty()
     .withMessage('Unit price is required')
-    .isDecimal({ decimal_digits: '1,2' })
-    .withMessage('Unit price must not exceeding 2 decimal places')
     .isFloat({ min: 1.0 })
     .withMessage('Unit price must be greater than 1.00')
     .toFloat()

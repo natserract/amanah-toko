@@ -181,17 +181,17 @@ export const ProductFactory = (sequelize: Sequelize) => {
         allowNull: false,
       },
       unitCost: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0.00,
       },
       unitPrice: {
-          type: DataTypes.DECIMAL(10, 2),
+          type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0.00,
       },
       store: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },

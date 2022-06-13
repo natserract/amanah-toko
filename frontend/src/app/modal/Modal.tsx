@@ -24,7 +24,9 @@ export default function Modal({
 
   const modalBody = (
     <div className="modal-body text-dark">
-      <p className="text-lg-start">{body}</p>
+      <p className="text-lg-start" dangerouslySetInnerHTML={{
+        __html: body
+      }} />
     </div>
   );
 
@@ -35,7 +37,7 @@ export default function Modal({
         className="btn btn-secondary rounded-0"
         data-bs-dismiss="modal"
       >
-        Close
+        Batal
       </button>
       <button
         type="button"

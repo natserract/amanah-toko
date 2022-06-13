@@ -8,7 +8,7 @@ import {
   useDestroyProductMutation,
 } from './productSlice';
 import { useGetCategoriesQuery } from '../category/categorySlice';
-import { Input, Select, TextArea } from '../../app/form/fields';
+import { CurrencyInput, Input, Select, TextArea } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import Modal from '../../app/modal/Modal';
 import Spinner from '../../app/spinners/Spinner';
@@ -22,10 +22,12 @@ type TParams = { productId: string };
 export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
   const { productId } = match.params;
   const [message, setMessage] = useState<Message | null>(null);
+
   const result = useGetProductQuery(productId);
   const [updateProduct] = useEditProductMutation();
   const [destroyProduct] = useDestroyProductMutation();
   const categoriesResult = useGetCategoriesQuery('?limit=all');
+
   const categories = useMemo(() => {
     if (categoriesResult.isSuccess && categoriesResult.data.categories) {
       return categoriesResult.data.categories.map((category: Category) => ({
@@ -35,6 +37,12 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [categoriesResult.isSuccess, categoriesResult.data?.categories]);
+
+  const [priceState, setPrice] = useState({
+    unitCost: NaN,
+    unitPrice: NaN
+  })
+
   const initialValues = useMemo(() => {
     if (result.isSuccess && result.data.product) {
       const product = { ...result.data.product };
@@ -60,6 +68,17 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
       window.scrollTo(0, 0);
     }
   }, [message?.type, message?.message]);
+
+  useEffect(() => {
+    if (result.data?.product) {
+      const { unitCost, unitPrice } = result.data.product
+
+      setPrice({
+        unitCost: +unitCost,
+        unitPrice: +unitPrice
+      })
+    }
+  }, [result.data])
 
   const handleDestroy = useCallback(async () => {
     if (productId.length) {
@@ -91,12 +110,21 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
       initialValues={initialValues}
       validationSchema={ProductSchema}
       onSubmit={async (values, actions) => {
-        if (values.description === '') {
-          delete values.description;
+        const { unitCost, unitPrice, description, ...formValues } = values;
+        const newFormValues = {
+          ...formValues,
+          ...priceState,
         }
+
         try {
           const { product, error, invalidData } = await updateProduct(
-            values
+            // @ts-ignore
+            {
+              ...newFormValues,
+              ...(values.description && {
+                description: values.description
+              })
+            }
           ).unwrap();
           actions.setSubmitting(false);
           if (product) {
@@ -137,19 +165,37 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
                 placeholder="Masukkan Nama Barang"
                 required={true}
               />
-              <Input
+              <CurrencyInput
                 name="unitCost"
                 label="Harga Beli"
-                type="number"
                 placeholder="Masukkan Harga Pembelian"
                 required={true}
+                onValueChange={(values) => {
+                  const { floatValue } = values;
+
+                  if (floatValue) {
+                    setPrice((state) => ({
+                      ...state,
+                      unitCost: floatValue
+                    }))
+                  }
+                }}
               />
-              <Input
+              <CurrencyInput
                 name="unitPrice"
                 label="Harga Jual"
-                type="number"
                 placeholder="Masukkan Harga Jual"
                 required={true}
+                onValueChange={(values) => {
+                  const { floatValue } = values;
+
+                  if (floatValue) {
+                    setPrice((state) => ({
+                      ...state,
+                      unitPrice: floatValue
+                    }))
+                  }
+                }}
               />
               <Input
                 name="store"

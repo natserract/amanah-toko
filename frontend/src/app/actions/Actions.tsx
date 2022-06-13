@@ -18,7 +18,7 @@ export default function Actions({
       {rows > 0 && (
         <div className="mt-3">
           <span className="me-2">
-            {rows} {title.toLowerCase()} selected. With selected:
+            {rows} {title.toLowerCase()} dipilih. Aksi:
           </span>
           <button
             type="button"
@@ -26,13 +26,13 @@ export default function Actions({
             data-bs-toggle="modal"
             data-bs-target="#deleteChecked"
           >
-            Delete
+            Hapus
           </button>
           <Modal
             id="deleteChecked"
             label="deleteCheckedLabel"
             title={`Delete ${title}`}
-            body={`You are about to delete ${rows} ${title.toLowerCase()}. This action cannot be undone.`}
+            body={`<b>Apakah Anda yakin ingin menghapus ${rows} ${title.toLowerCase()}?</b>. Aksi ini tidak bisa di undo.`}
             handleAction={handleDestroy}
           />
         </div>

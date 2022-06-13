@@ -14,7 +14,10 @@ const SupplierSchema = Yup.object({
     .min(11, 'Phone number must be 11 characters long')
     .max(13, 'Phone number must be 13 characters long'),
 
-  email: Yup.string().email('Please provide a valid email address'),
+  email:
+     Yup.string()
+     .optional()
+     .email('Please provide a valid email address'),
 });
 
 export default SupplierSchema;

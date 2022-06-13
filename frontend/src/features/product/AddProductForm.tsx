@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 
 import { useAddNewProductMutation } from './productSlice';
 import { useGetCategoriesQuery } from '../category/categorySlice';
-import { Input, Select, TextArea } from '../../app/form/fields';
+import { CurrencyInput, Input, Select, TextArea } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import { ProductSchema } from './ProductSchema';
@@ -13,9 +13,17 @@ import { Category, DraftProduct } from '../api';
 
 export const AddProductForm = () => {
   const [message, setMessage] = useState<Message | null>(null);
+
+  const history = useHistory();
+
   const [addNewProduct] = useAddNewProductMutation();
   const result = useGetCategoriesQuery('?limit=all');
-  const history = useHistory();
+
+  const [priceState, setPrice] = useState({
+    unitCost: 0,
+    unitPrice: 0
+  })
+
   const initialValues: DraftProduct = {
     name: '',
     unitCost: '',
@@ -23,7 +31,8 @@ export const AddProductForm = () => {
     store: '',
     description: '',
     categoryId: '',
-  };
+  }
+
   const categories = useMemo(() => {
     if (result.isSuccess && result.data.categories) {
       return result.data.categories.map((category: Category) => ({
@@ -31,6 +40,7 @@ export const AddProductForm = () => {
         label: category.name,
       }));
     }
+
     return [{ value: '', label: 'No results found' }];
   }, [result.isSuccess, result.data?.categories]);
 
@@ -45,18 +55,26 @@ export const AddProductForm = () => {
       initialValues={initialValues}
       validationSchema={ProductSchema}
       onSubmit={async (values, actions) => {
-        if (values.description === '') {
-          delete values.description;
+        const { unitCost, unitPrice, description, ...formValues } = values;
+        const newFormValues = {
+          ...formValues,
+          ...priceState,
         }
+
         try {
           const { product, error, invalidData } = await addNewProduct(
-            values
+            {
+              ...newFormValues,
+              ...(values.description && {
+                description: values.description
+              })
+            }
           ).unwrap();
           actions.setSubmitting(false);
           if (product) {
             const message = {
               type: 'success',
-              message: 'Product created successfully',
+              message: 'Barang berhasil dibuat',
             };
             history.push({
               pathname: '/products',
@@ -70,7 +88,7 @@ export const AddProductForm = () => {
             actions.setErrors(invalidData);
             setMessage({
               type: 'danger',
-              message: 'Please correct the errors below',
+              message: 'Harap check kembali errors dibawah ini',
             });
           }
         } catch (error) {
@@ -88,19 +106,37 @@ export const AddProductForm = () => {
               placeholder="Masukkan Nama Barang"
               required={true}
             />
-            <Input
+            <CurrencyInput
               name="unitCost"
               label="Harga Beli"
-              type="number"
               placeholder="Masukkan Harga Pembelian"
               required={true}
+              onValueChange={(values) => {
+                const { floatValue } = values;
+
+                if (floatValue) {
+                  setPrice((state) => ({
+                    ...state,
+                    unitCost: floatValue
+                  }))
+                }
+              }}
             />
-            <Input
+            <CurrencyInput
               name="unitPrice"
               label="Harga Jual"
-              type="number"
               placeholder="Masukkan Harga Jual"
               required={true}
+              onValueChange={(values) => {
+                const { floatValue } = values;
+
+                if (floatValue) {
+                  setPrice((state) => ({
+                    ...state,
+                    unitPrice: floatValue
+                  }))
+                }
+              }}
             />
             <Input
               name="store"

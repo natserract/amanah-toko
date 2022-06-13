@@ -26,9 +26,7 @@ export const initModel = async (withoutSync = false) => {
   });
 
   if (!withoutSync) {
-    await sequelize.sync({
-      force: true,
-    });
+    await sequelize.sync({ force: true });
   }
 };
 

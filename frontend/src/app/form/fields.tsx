@@ -8,6 +8,7 @@ import {
   DataListField,
   TextAreaField,
 } from './index';
+import NumberFormat, { NumberFormatProps } from 'react-number-format'
 
 const FieldWrapper = ({
   inline,
@@ -88,6 +89,36 @@ const Input: FC<InputField> = ({
       <input
         className={fieldClassName(meta, props.value, validation)}
         {...field}
+        {...props}
+      />
+      <ErrorMessage meta={meta} />
+    </FieldWrapper>
+  );
+};
+
+const CurrencyInput: FC<InputField & Partial<NumberFormatProps>> = ({
+  label,
+  inline = false,
+  validation,
+  hidden,
+  ...props
+}) => {
+  const [field, meta] = useField(props);
+  return (
+    <FieldWrapper
+      hidden={hidden}
+      inline={inline}
+      idOrName={props.id || props.name}
+      label={label}
+      required={props.required}
+    >
+      <NumberFormat
+        className={fieldClassName(meta, props.value, validation)}
+        prefix="Rp. "
+        thousandSeparator="."
+        decimalSeparator=","
+        allowNegative={false}
+        {...(field)}
         {...props}
       />
       <ErrorMessage meta={meta} />
@@ -244,4 +275,4 @@ const TextArea: FC<TextAreaField> = ({
   );
 };
 
-export { Input, Checkbox, Select, DataList, TextArea };
+export { Input, CurrencyInput, Checkbox, Select, DataList, TextArea };

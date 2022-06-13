@@ -165,7 +165,7 @@ export default function DataTable(props: DataTableProps) {
                   selection={selection}
                 />
               ) : (
-                <h3 className="text-center">No {title.toLowerCase()} found</h3>
+                <h3 className="text-center">Belum ada {title.toLowerCase()}</h3>
               )}
             </>
           )}
