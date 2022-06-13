@@ -86,10 +86,10 @@ export default function Table({
       if (col.link) {
         const [path, itemId] = col.link.split(':');
         tdChild = <Link to={`${path}${item[itemId]}`}>{label}</Link>;
-      } else if (col.type && col.type === "price") {
+      } else if (col.type && col.type === 'price') {
         // :: Check price, by key name { cost, price }
         tdChild = <> {toRupiah(+label)} </>;
-      } else if (col.type && col.type === "date") {
+      } else if (col.type && col.type === 'date') {
         tdChild = <> {formatDate(label)} </>;
       } else {
         tdChild = <> {label} </>;

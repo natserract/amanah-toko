@@ -1,7 +1,6 @@
+import format from 'date-fns/format';
 
-import format from 'date-fns/format'
-
-type Value = string | number | boolean | Date | null | undefined
+type Value = string | number | boolean | Date | null | undefined;
 
 const DEFAULT_DATE_FORMAT = 'dd MMM yyyy';
 
@@ -10,10 +9,10 @@ export function formatDate(value: Value): string {
   let formattedDate = '';
 
   if (value) {
-    const newDate = new Date(value as string | Date)
+    const newDate = new Date(value as string | Date);
 
     if (!isNaN(newDate.getTime())) {
-      formattedDate = format(new Date(newDate?.toISOString()), dateFormat)
+      formattedDate = format(new Date(newDate?.toISOString()), dateFormat);
     }
   }
 

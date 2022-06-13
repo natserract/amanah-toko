@@ -130,7 +130,11 @@ export const AddPurchaseForm = () => {
               className="btn btn-primary rounded-0 me-2 mt-3"
               disabled={props.isSubmitting}
             >
-              {props.isSubmitting ? <ButtonSpinner text="Menambahkan" /> : 'Tambah'}
+              {props.isSubmitting ? (
+                <ButtonSpinner text="Menambahkan" />
+              ) : (
+                'Tambah'
+              )}
             </button>
           </form>
         </>

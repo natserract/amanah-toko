@@ -50,8 +50,8 @@ export const PurchasesList = React.memo(() => {
         callback: (supplier: Supplier) => supplier.name,
       },
       { name: 'Jumlah Barang', accessor: 'quantity' },
-      { name: 'Harga Beli', accessor: 'unitCost', type: "price" },
-      { name: 'Harga Jual', accessor: 'unitPrice', type: "price" },
+      { name: 'Harga Beli', accessor: 'unitCost', type: 'price' },
+      { name: 'Harga Jual', accessor: 'unitPrice', type: 'price' },
       { name: 'Tanggal', accessor: 'createdAt', type: 'date' },
     ],
     []

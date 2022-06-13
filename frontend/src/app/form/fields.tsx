@@ -21,7 +21,7 @@ const FieldWrapper = ({
     ? { div: 'col-auto', label: 'visually-hidden' }
     : { div: 'mb-3', label: 'form-label' };
 
-  if (hidden) return <React.Fragment />
+  if (hidden) return <React.Fragment />;
 
   return (
     <div className={classes.div}>

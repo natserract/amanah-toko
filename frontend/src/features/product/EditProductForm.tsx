@@ -137,7 +137,7 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
                 placeholder="Masukkan Nama Barang"
                 required={true}
               />
-               <Input
+              <Input
                 name="unitCost"
                 label="Harga Beli"
                 type="number"
