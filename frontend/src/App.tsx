@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Navbar from './app/Navbar';
 import { ScrollTop } from './app/ScrollTop';
 import { Footer } from './app/Footer';
@@ -36,7 +36,8 @@ function App() {
           <Navbar />
           <ScrollTop />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => <Redirect to="/products" />} />
+            <Route exact path="/products" component={ProductsList} />
 
             <Route exact path="/categories" component={CategoriesList} />
             <Route
@@ -50,7 +51,6 @@ function App() {
               component={EditCategoryForm}
             />
 
-            <Route exact path="/products" component={ProductsList} />
             <Route exact path="/products/create" component={AddProductForm} />
             <Route
               exact

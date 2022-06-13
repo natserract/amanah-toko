@@ -40,4 +40,5 @@ export interface FieldWrapperProps {
   label: string;
   required?: boolean;
   children: React.ReactNode;
+  hidden?: boolean;
 }

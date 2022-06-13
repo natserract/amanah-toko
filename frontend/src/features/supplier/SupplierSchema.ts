@@ -8,10 +8,10 @@ const SupplierSchema = Yup.object({
     .max(50, 'Supplier name must not exceed 20 characters')
     .matches(/^[aA-zZ\s]+$/, 'Supplier name must be alphabetic'),
 
-  phone: Yup.number()
+  phone: Yup.string()
     .typeError('Phone number is required')
     .required('Phone number is required')
-    .min(11, 'Phone number must be 10 characters long')
+    .min(11, 'Phone number must be 11 characters long')
     .max(13, 'Phone number must be 13 characters long'),
 
   email: Yup.string().email('Please provide a valid email address'),

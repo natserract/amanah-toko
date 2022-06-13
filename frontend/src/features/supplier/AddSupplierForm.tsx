@@ -65,30 +65,30 @@ export const AddSupplierForm = () => {
           <form onSubmit={props.handleSubmit}>
             <Input
               name="name"
-              label="Name"
+              label="Nama"
               type="text"
-              placeholder="Enter supplier's name"
+              placeholder="Masukkan Nama Supplier"
               required={true}
             />
             <Input
               name="phone"
-              label="Phone"
+              label="No. Hp"
               type="text"
-              placeholder="Enter supplier's phone number"
+              placeholder="Masukkan No Hp Supplier"
               required={true}
             />
             <Input
               name="email"
               label="Email"
               type="email"
-              placeholder="Enter supplier's email"
+              placeholder="Masukkan Email Supplier"
             />
             <button
               type="submit"
               className="btn btn-primary rounded-0 me-2 mt-3"
               disabled={props.isSubmitting}
             >
-              {props.isSubmitting ? <ButtonSpinner text="Adding" /> : 'Add'}
+              {props.isSubmitting ? <ButtonSpinner text="Menambahkan" /> : 'Tambah'}
             </button>
           </form>
         </>
@@ -98,7 +98,7 @@ export const AddSupplierForm = () => {
 
   return (
     <FormCard
-      title="Add Supplier"
+      title="Tambah Supplier"
       message={message}
       setMessage={setMessage}
       cardBody={form}

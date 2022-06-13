@@ -51,7 +51,7 @@ export const AddPurchaseForm = () => {
         quantity: '',
         unitCost: '',
         unitPrice: '',
-        location: '',
+        location: 'store',
       }}
       validationSchema={PurchaseSchema}
       onSubmit={async (values, actions) => {
@@ -90,52 +90,47 @@ export const AddPurchaseForm = () => {
           <form onSubmit={props.handleSubmit}>
             <Select
               name="supplierId"
-              label="Select supplier"
+              label="Pilih Supplier"
               options={suppliers}
               required={true}
             >
-              <option value="">Select a supplier</option>
+              <option value="">Pilih Supplier</option>
             </Select>
             <Select
               name="productId"
-              label="Select product"
+              label="Pilih Barang"
               options={products}
               required={true}
             >
-              <option value="">Select a product</option>
+              <option value="">Pilih Barang</option>
             </Select>
             <Input
               name="quantity"
-              label="Quantity"
+              label="Jumlah Barang"
               type="number"
-              placeholder="Enter quantity"
+              placeholder="Masukkan Jumlah Barang"
               required={true}
             />
             <Input
               name="unitCost"
-              label="Unit cost"
+              label="Harga Beli"
               type="number"
-              placeholder="Enter product unit cost"
+              placeholder="Masukkan Harga Beli"
               required={true}
             />
             <Input
               name="unitPrice"
-              label="Unit price"
+              label="Harga Jual"
               type="number"
-              placeholder="Enter product unit price"
+              placeholder="Masukkan Harga Jual"
               required={true}
             />
-            <Select name="location" label="Select location" required={true}>
-              <option value="">Select a location</option>
-              <option value="store">Store</option>
-              <option value="counter">Counter</option>
-            </Select>
             <button
               type="submit"
               className="btn btn-primary rounded-0 me-2 mt-3"
               disabled={props.isSubmitting}
             >
-              {props.isSubmitting ? <ButtonSpinner text="Adding" /> : 'Add'}
+              {props.isSubmitting ? <ButtonSpinner text="Menambahkan" /> : 'Tambah'}
             </button>
           </form>
         </>
@@ -145,7 +140,7 @@ export const AddPurchaseForm = () => {
 
   return (
     <FormCard
-      title="Add Purchase"
+      title="Tambah Pembelian"
       message={message}
       setMessage={setMessage}
       cardBody={form}

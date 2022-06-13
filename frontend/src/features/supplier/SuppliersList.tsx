@@ -11,9 +11,9 @@ import { Message } from '../../app/index';
 const SuppliersSearchForm = () => (
   <Input
     name="name"
-    label="Name"
+    label="Nama"
     type="search"
-    placeholder="Enter supplier name"
+    placeholder="Masukkan Nama Supplier"
     inline={true}
     validation={false}
   />
@@ -26,8 +26,8 @@ export const SuppliersList = React.memo(() => {
   const [destroySupplier] = useDestroySupplierMutation();
   const cols = useMemo(
     () => [
-      { name: 'Name', accessor: 'name', link: '/suppliers/:id' },
-      { name: 'Phone', accessor: 'phone' },
+      { name: 'Nama', accessor: 'name', link: '/suppliers/:id' },
+      { name: 'No. Hp', accessor: 'phone' },
       { name: 'Email', accessor: 'email' },
     ],
     []
@@ -84,7 +84,7 @@ export const SuppliersList = React.memo(() => {
           ? result.data.pagination
           : { count: 0 }
       }
-      title="Suppliers"
+      title="Supplier"
       message={message}
       setMessage={setMessage}
       createItemLink="/suppliers/create"

@@ -6,6 +6,7 @@ interface Col {
   accessor: string;
   link?: string;
   callback?: (value: any) => string;
+  type?: "price" | "date" | string;
 }
 
 export interface Item {

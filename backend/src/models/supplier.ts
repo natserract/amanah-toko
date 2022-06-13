@@ -97,7 +97,7 @@ export const SupplierFactory = (sequelize: Sequelize) => {
         allowNull: false,
       },
       phone: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(13),
         unique: true,
         allowNull: false,
       },

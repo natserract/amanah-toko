@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toRupiah } from '../../utils/currency';
+import { formatDate } from '../../utils/format';
 import { isEmpty } from '../libs/isEmpty';
 import { TableProps } from './index';
 
@@ -72,8 +73,6 @@ export default function Table({
   };
 
   const renderTd = (item: any) => {
-    const priceKeys = ['unitCost', 'unitPrice'];
-
     return cols.map((col) => {
       let label = '';
       let tdChild: JSX.Element;
@@ -87,9 +86,11 @@ export default function Table({
       if (col.link) {
         const [path, itemId] = col.link.split(':');
         tdChild = <Link to={`${path}${item[itemId]}`}>{label}</Link>;
-      } else if (priceKeys.includes(col.accessor)) {
+      } else if (col.type && col.type === "price") {
         // :: Check price, by key name { cost, price }
         tdChild = <> {toRupiah(+label)} </>;
+      } else if (col.type && col.type === "date") {
+        tdChild = <> {formatDate(label)} </>;
       } else {
         tdChild = <> {label} </>;
       }

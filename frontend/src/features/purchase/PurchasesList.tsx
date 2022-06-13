@@ -13,9 +13,9 @@ const PurchasesSearchForm = () => (
   <>
     <Input
       name="product"
-      label="Product"
+      label="Barang"
       type="search"
-      placeholder="Enter product name"
+      placeholder="Masukkan Nama Barang"
       inline={true}
       validation={false}
     />
@@ -23,7 +23,7 @@ const PurchasesSearchForm = () => (
       name="supplier"
       label="Supplier"
       type="search"
-      placeholder="Enter supplier name"
+      placeholder="Masukkan Nama Supplier"
       inline={true}
       validation={false}
     />
@@ -38,13 +38,7 @@ export const PurchasesList = React.memo(() => {
   const cols = useMemo(
     () => [
       {
-        name: '',
-        accessor: 'id',
-        link: '/purchases/:id',
-        callback: (id: string) => 'Edit',
-      },
-      {
-        name: 'Product',
+        name: 'Barang',
         accessor: 'product',
         link: '/products/:productId',
         callback: (product: Product) => product.name,
@@ -55,10 +49,10 @@ export const PurchasesList = React.memo(() => {
         link: '/suppliers/:supplierId',
         callback: (supplier: Supplier) => supplier.name,
       },
-      { name: 'Quantity', accessor: 'quantity' },
-      { name: 'Unit cost', accessor: 'unitCost' },
-      { name: 'Unit price', accessor: 'unitPrice' },
-      { name: 'Location', accessor: 'location' },
+      { name: 'Jumlah Barang', accessor: 'quantity' },
+      { name: 'Harga Beli', accessor: 'unitCost', type: "price" },
+      { name: 'Harga Jual', accessor: 'unitPrice', type: "price" },
+      { name: 'Tanggal', accessor: 'createdAt', type: 'date' },
     ],
     []
   );
@@ -114,7 +108,7 @@ export const PurchasesList = React.memo(() => {
           ? result.data.pagination
           : { count: 0 }
       }
-      title="Purchases"
+      title="Pembelian (Barang Masuk)"
       message={message}
       setMessage={setMessage}
       createItemLink="/purchases/create"

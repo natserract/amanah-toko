@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { useField, FieldMetaProps } from 'formik';
 import {
   FieldWrapperProps,
@@ -15,10 +15,13 @@ const FieldWrapper = ({
   label,
   required,
   children,
+  hidden = false,
 }: FieldWrapperProps) => {
   const classes = inline
     ? { div: 'col-auto', label: 'visually-hidden' }
     : { div: 'mb-3', label: 'form-label' };
+
+  if (hidden) return <React.Fragment />
 
   return (
     <div className={classes.div}>
@@ -69,12 +72,14 @@ const Input: FC<InputField> = ({
   label,
   inline = false,
   validation,
+  hidden,
   ...props
 }) => {
   const [field, meta] = useField(props);
 
   return (
     <FieldWrapper
+      hidden={hidden}
       inline={inline}
       idOrName={props.id || props.name}
       label={label}
@@ -126,6 +131,7 @@ const Select: FC<SelectField> = ({
   validation,
   options,
   children,
+  hidden,
   ...props
 }) => {
   const [field, meta] = useField(props);
@@ -155,9 +161,11 @@ const Select: FC<SelectField> = ({
       idOrName={props.name}
       label={label}
       required={props.required}
+      hidden={hidden}
     >
       <select
         className={fieldClassName(meta, props.value, validation)}
+        hidden={hidden}
         {...field}
         {...props}
       >

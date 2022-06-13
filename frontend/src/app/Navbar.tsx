@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-success">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/products">
           Amanah Toko
         </Link>
         <button
@@ -21,20 +21,14 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="nav nav-pills">
             <li className="nav-item">
-              <NavLink exact to="/" className="nav-link text-white">
-                Home
+              <NavLink to="/products" className="nav-link text-white">
+                Barang
               </NavLink>
             </li>
 
             <li className="nav-item">
               <NavLink to="/categories" className="nav-link text-white">
                 Kategori
-              </NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink to="/products" className="nav-link text-white">
-                Barang
               </NavLink>
             </li>
 
