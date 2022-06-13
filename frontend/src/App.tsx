@@ -83,8 +83,8 @@ function App() {
               component={EditSupplierForm}
             />
 
-            <Route exact path="/transfers" component={TransfersList} />
-            <Route exact path="/transfers/create" component={AddTransferForm} />
+            {/* <Route exact path="/transfers" component={TransfersList} />
+            <Route exact path="/transfers/create" component={AddTransferForm} /> */}
           </Switch>
         </Router>
       </div>

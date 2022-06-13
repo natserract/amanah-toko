@@ -209,7 +209,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#cancelSale"
               >
-                Batal
+                Batalkan Penjualan
               </button>
 
               <button

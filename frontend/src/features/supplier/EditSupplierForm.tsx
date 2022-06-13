@@ -109,23 +109,23 @@ export const EditSupplierForm = ({ match }: RouteComponentProps<TParams>) => {
             <form onSubmit={props.handleSubmit}>
               <Input
                 name="name"
-                label="Name"
+                label="Nama"
                 type="text"
-                placeholder="Enter supplier's name"
+                placeholder="Masukkan Nama Supplier"
                 required={true}
               />
               <Input
                 name="phone"
-                label="Phone"
+                label="No.Hp"
                 type="text"
-                placeholder="Enter supplier's phone number"
+                placeholder="Masukkan No.Hp Supplier"
                 required={true}
               />
               <Input
                 name="email"
                 label="Email"
                 type="email"
-                placeholder="Enter supplier's email"
+                placeholder="Masukkan Email"
               />
 
               <button
@@ -134,7 +134,7 @@ export const EditSupplierForm = ({ match }: RouteComponentProps<TParams>) => {
                 disabled={props.isSubmitting}
               >
                 {props.isSubmitting ? (
-                  <ButtonSpinner text="Updating" />
+                  <ButtonSpinner text="Mengupdate" />
                 ) : (
                   'Update'
                 )}
@@ -146,7 +146,7 @@ export const EditSupplierForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#deleteSupplier"
               >
-                Delete
+                Hapus
               </button>
             </form>
           )}
@@ -167,8 +167,8 @@ export const EditSupplierForm = ({ match }: RouteComponentProps<TParams>) => {
       <Modal
         id="deleteSupplier"
         label="deleteSupplierLabel"
-        title="Delete Supplier"
-        body="Are you sure you want to delete this supplier? This action cannot be undone."
+        title="Hapus Supplier"
+        body="Apakah Anda yakin ingin menghapus supplier? Aksi ini tidak bisa di-undo"
         handleAction={handleDestroy}
       />
     </>

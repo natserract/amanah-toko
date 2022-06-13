@@ -17,6 +17,7 @@ const SupplierSchema = Yup.object({
   email:
      Yup.string()
      .optional()
+     .nullable()
      .email('Please provide a valid email address'),
 });
 

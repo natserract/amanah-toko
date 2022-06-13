@@ -50,11 +50,11 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink to="/transfers" className="nav-link text-white">
                 Transfers
               </NavLink>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

@@ -28,7 +28,11 @@ export const SuppliersList = React.memo(() => {
     () => [
       { name: 'Nama', accessor: 'name', link: '/suppliers/:id' },
       { name: 'No. Hp', accessor: 'phone' },
-      { name: 'Email', accessor: 'email' },
+      {
+        name: 'Email',
+        accessor: 'email',
+        callback: (value: string) => value ?? '-'
+      },
     ],
     []
   );
