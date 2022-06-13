@@ -30,16 +30,17 @@ export class Sale
 {
   declare id: string;
   declare quantity: number;
+  declare description?: string;
 
-  invoiceNo?: string;
-  totalPrice?: number;
+  declare invoiceNo?: string;
+  declare totalPrice?: number;
 
   // timestamps
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
   // foreign keys
-  productId?: string;
+  declare productId?: string;
 
   declare dataValues?: Sale;
 

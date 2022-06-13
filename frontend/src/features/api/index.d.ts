@@ -56,6 +56,7 @@ export interface DraftSale {
   [k: string]: string | number;
   productId: string;
   quantity: string | number;
+  description?: string;
 }
 
 export interface Sale extends DraftSale, CommonFields {

@@ -143,6 +143,7 @@ async function read(req: Request, res: Response, next: NextFunction) {
 async function update(req: Request, res: Response) {
   try {
     const { id, quantity, description } = req.body;
+
     const sale = await Sale.findByPk(id);
     if (sale === null) {
       return res.status(400).json({
@@ -157,11 +158,11 @@ async function update(req: Request, res: Response) {
       });
     }
 
-    if (sale.dataValues!.quantity === quantity) {
-      return res.status(200).json({
-        message: 'Sale updated successfully',
-      });
-    }
+    // if (sale.dataValues!.quantity === quantity) {
+    //   return res.status(200).json({
+    //     message: 'Sale updated successfully',
+    //   });
+    // }
 
     return await sequelize.transaction(async (t) => {
       const store =

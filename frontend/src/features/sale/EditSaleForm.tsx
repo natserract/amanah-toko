@@ -52,8 +52,11 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
 
   const initialValues = useMemo(() => {
     if (result.isSuccess && result.data.sale) {
-      console.log('result.data.sale', result.data.sale)
-      return { ...result.data.sale };
+      const sale = { ...result.data.sale };
+      if (sale.description === null) {
+        sale.description = '';
+      }
+      return sale
     } else {
       return { productId: '', quantity: '', description: '', };
     }
@@ -121,6 +124,10 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
       initialValues={initialValues}
       validationSchema={SaleSchema}
       onSubmit={async (values, actions) => {
+        if (values.description === '') {
+          delete values.description;
+        }
+
         try {
           const { sale, error, invalidData } = await updateSale(
             values
@@ -175,7 +182,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
               <TextArea
                 name="description"
                 label="Deskripsi"
-                placeholder="Masukkan Deskripsi Barang"
+                placeholder="Masukkan Deskripsi Penjualan"
               />
               <Input
                 name="createdAt"

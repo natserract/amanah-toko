@@ -95,7 +95,7 @@ export const AddSaleForm = () => {
             <TextArea
               name="description"
               label="Deskripsi"
-              placeholder="Masukkan Deskripsi Barang"
+              placeholder="Masukkan Deskripsi Penjualan"
             />
 
             <button

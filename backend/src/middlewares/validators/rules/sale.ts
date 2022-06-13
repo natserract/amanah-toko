@@ -87,6 +87,7 @@ export const saleRules = {
       }),
 
     quantity,
+    description,
   ],
 
   destroy: [destroy('Sale', async (pk) => await Sale.findByPk(pk))],
