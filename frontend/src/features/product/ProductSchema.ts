@@ -12,7 +12,19 @@ export const ProductSchema = Yup.object().shape({
 
 
   unitPrice: Yup.string()
-    .required('Unit price is required'),
+    .required('Unit price is required')
+    .test(
+      'notLessThanUnitCost',
+      'Unit price cannot be less than unit cost',
+      function (value) {
+        const unitCost = parseFloat(this.parent.unitCost);
+        if (unitCost) {
+          // @ts-ignore
+          return parseFloat(value) >= unitCost;
+        }
+        return true;
+      }
+    ),
 
   store: Yup.number()
     .typeError('Please provide a valid number for items in store')

@@ -5,6 +5,7 @@ import { read } from './libs/read.js';
 import filters from './libs/filters.js';
 import { queryWithFilter } from './libs/queryWithFilter.js';
 import { db } from '../../../models';
+import { description } from './libs/description.js';
 
 const Op = Sequelize.Op;
 const { Purchase, Supplier, Product } = db;
@@ -52,8 +53,6 @@ const commonRules = [
     .escape()
     .notEmpty()
     .withMessage('Unit cost is required')
-    .isDecimal({ decimal_digits: '1,2' })
-    .withMessage('Unit cost must not exceeding 2 decimal places')
     .isFloat({ min: 1.0 })
     .withMessage('Unit cost must be greater than 1.00')
     .toFloat(),
@@ -63,14 +62,12 @@ const commonRules = [
     .escape()
     .notEmpty()
     .withMessage('Unit price is required')
-    .isDecimal({ decimal_digits: '1,2' })
-    .withMessage('Unit price must not exceeding 2 decimal places')
     .isFloat({ min: 1.0 })
     .withMessage('Unit price must be greater than 1.00')
     .toFloat()
     .custom((unitPrice, { req }) => {
       if (unitPrice < req.body.unitCost) {
-        throw new Error('Unit price must not be less than unit cost');
+        throw new Error('Harga jual harus lebih besar dari harga beli');
       }
       return true;
     }),
@@ -84,6 +81,8 @@ const commonRules = [
     .withMessage('Location must be alphabetic')
     .isIn(['store'])
     .withMessage("Valid locations are 'store'"),
+
+  description
 ];
 
 export const purchaseRules = {

@@ -38,6 +38,12 @@ export const PurchasesList = React.memo(() => {
   const cols = useMemo(
     () => [
       {
+        name: 'Invoice No',
+        accessor: 'invoiceNo',
+        link: "/purchases/:id",
+        callback: (value: string) => `BILL-${value}`
+      },
+      {
         name: 'Barang',
         accessor: 'product',
         link: '/products/:productId',
@@ -51,8 +57,14 @@ export const PurchasesList = React.memo(() => {
       },
       { name: 'Jumlah Barang', accessor: 'quantity' },
       { name: 'Harga Beli', accessor: 'unitCost', type: 'price' },
-      { name: 'Harga Jual', accessor: 'unitPrice', type: 'price' },
+      { name: 'Total', accessor: 'totalPrice', type: "price" },
       { name: 'Tanggal', accessor: 'createdAt', type: 'date' },
+      {
+        name: 'Invoice',
+        accessor: '',
+        link: "/purchases/invoice/:id",
+        callback: (id: string) => 'Lihat Invoice'
+     },
     ],
     []
   );

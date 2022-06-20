@@ -156,7 +156,7 @@ export const AddProductForm = () => {
             <TextArea
               name="description"
               label="Deskripsi"
-              placeholder="Masukkan Deskripsi Barang"
+              placeholder="Masukkan Deskripsi"
             />
 
             <button

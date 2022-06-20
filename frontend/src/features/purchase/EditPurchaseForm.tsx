@@ -9,7 +9,7 @@ import {
 } from './purchaseSlice';
 import { useGetSuppliersQuery } from '../supplier/supplierSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select } from '../../app/form/fields';
+import { Input, Select, CurrencyInput, TextArea } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import Modal from '../../app/modal/Modal';
 import Spinner from '../../app/spinners/Spinner';
@@ -46,9 +46,15 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [allSuppliers.isSuccess, allSuppliers.data?.suppliers]);
+
   const initialValues = useMemo(() => {
     if (result.isSuccess && result.data.purchase) {
-      return { ...result.data.purchase };
+      const purchase = { ...result.data.purchase };
+      if (purchase.description === null) {
+        purchase.description = '';
+      }
+
+      return purchase
     } else {
       return {
         supplierId: '',
@@ -56,17 +62,36 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
         quantity: '',
         unitCost: '',
         unitPrice: '',
-        location: '',
+        location: 'store',
+        description: '',
       };
     }
   }, [result.isSuccess, result.data?.purchase]);
+
   const history = useHistory();
+
+  const [priceState, setPrice] = useState({
+    unitCost: NaN,
+    unitPrice: NaN
+  })
 
   useEffect(() => {
     if (message?.type && message?.message) {
       window.scrollTo(0, 0);
     }
   }, [message?.type, message?.message]);
+
+  useEffect(() => {
+    if (result.data?.purchase) {
+      const { unitCost, unitPrice } = result.data.purchase
+      console.log('result.data.purchase', result.data.purchase)
+
+      setPrice({
+        unitCost: +unitCost,
+        unitPrice: +unitPrice
+      })
+    }
+  }, [result.data])
 
   const handleDestroy = useCallback(async () => {
     if (purchaseId.length) {
@@ -98,9 +123,21 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
       initialValues={initialValues}
       validationSchema={PurchaseSchema}
       onSubmit={async (values, actions) => {
+        const { unitCost, unitPrice, ...formValues } = values;
+        const newFormValues = {
+          ...formValues,
+          ...priceState,
+        }
+
         try {
           const { purchase, error, invalidData } = await updatePurchase(
-            values
+            // @ts-ignore
+            {
+            ...newFormValues,
+            ...(values.description && {
+              description: values.description
+            })
+            }
           ).unwrap();
           actions.setSubmitting(false);
           if (purchase) {
@@ -136,46 +173,60 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
             <form onSubmit={props.handleSubmit}>
               <Select
                 name="supplierId"
-                label="Select supplier"
+                label="Pilih Supplier"
                 options={suppliers}
                 required={true}
               >
-                <option value="">Select a supplier</option>
+                <option value="">Pilih supplier</option>
               </Select>
               <Select
                 name="productId"
-                label="Select product"
+                label="Pilih Barang"
                 options={products}
                 required={true}
               >
-                <option value="">Select a product</option>
+                <option value="">Pilih barang</option>
               </Select>
               <Input
                 name="quantity"
-                label="Quantity"
+                label="Jumlah"
                 type="number"
-                placeholder="Enter quantity"
+                placeholder="Masukkan Jumlah Barang"
                 required={true}
               />
-              <Input
+              <CurrencyInput
                 name="unitCost"
-                label="Unit cost"
-                type="number"
-                placeholder="Enter product unit cost"
+                label="Harga Beli"
+                placeholder="Masukkan Harga Pembelian"
                 required={true}
+                onValueChange={(values) => {
+                  const { floatValue } = values;
+
+                  if (floatValue) {
+                    setPrice((state) => ({
+                      ...state,
+                      unitCost: floatValue
+                    }))
+                  }
+                }}
               />
-              <Input
+              <CurrencyInput
                 name="unitPrice"
-                label="Unit price"
-                type="number"
-                placeholder="Enter product unit price"
+                label="Harga Jual"
+                placeholder="Masukkan Harga Jual"
                 required={true}
+                onValueChange={(values) => {
+                  const { floatValue: unitPrice } = values;
+
+                  if (unitPrice) {
+                    setPrice((state) => ({
+                      ...state,
+                      unitPrice
+                    }))
+                  }
+                }}
               />
-              <Select name="location" label="Select location" required={true}>
-                <option value="">Select a location</option>
-                <option value="store">Store</option>
-                <option value="counter">Counter</option>
-              </Select>
+              <TextArea name="description" label="Deskripsi" placeholder="Masukkan Deskripsi" />
 
               <button
                 type="submit"
@@ -195,7 +246,7 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
                 data-bs-toggle="modal"
                 data-bs-target="#deletePurchase"
               >
-                Delete
+                Hapus
               </button>
             </form>
           )}

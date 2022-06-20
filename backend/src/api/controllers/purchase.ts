@@ -38,7 +38,7 @@ async function purchases(req: Request, res: Response, next: NextFunction) {
 
 async function create(req: Request, res: Response) {
   try {
-    const { supplierId, productId, quantity, unitCost, unitPrice, location } =
+    const { supplierId, productId, quantity, unitCost, unitPrice, location, description } =
       req.body;
     const supplier = Supplier.findByPk(supplierId);
     if (supplier === null) {
@@ -55,6 +55,23 @@ async function create(req: Request, res: Response) {
     }
 
     return await sequelize.transaction(async (t) => {
+      const totalPrice = unitCost * quantity;
+
+      const { count } = await Purchase.findAndCountAll({
+        distinct: true,
+        include: [
+          {
+            model: Product,
+            as: 'product',
+          },
+          {
+            model: Supplier,
+            as: 'supplier',
+          },
+        ],
+      });
+      const invoiceNo = String(count + 1);
+
       const purchase = await Purchase.create(
         {
           supplierId,
@@ -63,6 +80,9 @@ async function create(req: Request, res: Response) {
           unitCost,
           unitPrice,
           location,
+          description,
+          totalPrice,
+          invoiceNo
         },
         { transaction: t }
       );
@@ -123,7 +143,9 @@ async function update(req: Request, res: Response) {
       unitCost,
       unitPrice,
       location,
+      description,
     } = req.body;
+
     const purchase = await Purchase.findByPk(id);
     if (purchase === null) {
       return res.status(400).json({
@@ -148,24 +170,27 @@ async function update(req: Request, res: Response) {
     return await sequelize.transaction(async (t) => {
       let { store } = product.dataValues!;
       const prevLocation = purchase.dataValues!.location;
+      const prevUnitCost = purchase.dataValues!.unitCost
+      const prevUnitPrice= purchase.dataValues!.unitPrice
       const prevQuantity = purchase.dataValues!.quantity;
 
-      if (prevLocation !== location) {
-        if (prevLocation === 'store') {
-          store -= prevQuantity;
-        }
-
+      if (location === 'store') {
         if (store < 0) {
           throw new Error(
             'Purchase update will result in a negative value for items in store'
           );
         }
 
-        if (location === 'store') {
-          store += quantity;
+        if (quantity > prevQuantity) {
+          store += prevQuantity;
+        }
+
+        if (quantity < prevQuantity) {
+          store -= quantity;
         }
       }
 
+      const totalPrice = unitCost * quantity;
       const [affectedPurchaseRow] = await Purchase.update(
         {
           supplierId,
@@ -174,6 +199,8 @@ async function update(req: Request, res: Response) {
           unitCost,
           unitPrice,
           location,
+          description,
+          totalPrice,
         },
         {
           where: { id },
@@ -182,7 +209,7 @@ async function update(req: Request, res: Response) {
       );
 
       const [affectedProductRow] = await Product.update(
-        { store },
+        { store, unitCost, unitPrice },
         {
           where: { id: productId },
           transaction: t,

@@ -15,43 +15,20 @@ const PurchaseSchema = Yup.object({
     .positive('Quantity must be greater than 0')
     .integer('Quantity must be an integer'),
 
-  unitCost: Yup.number()
-    .typeError('Unit cost is required')
-    .required('Unit cost is required')
-    .positive('Unit cost must be greater than 0')
-    .test(
-      'maxTwoDecimalPoints',
-      'Unit cost must not exceed 2 decimal points',
-      // @ts-ignore
-      (number) => /^\d+(\.\d{1,2})?$/.test(number)
-    ),
+  unitCost: Yup.string()
+    .required('Unit cost is required'),
 
-  unitPrice: Yup.number()
-    .typeError('Unit price is required')
-    .required('Unit price is required')
-    .positive('Unit price must be greater than 0')
-    .test(
-      'maxTwoDecimalPoints',
-      'Unit price must not exceed 2 decimal points',
-      // @ts-ignore
-      (number) => /^\d+(\.\d{1,2})?$/.test(number)
-    )
-    .test(
-      'notLessThanUnitCost',
-      'Unit price cannot be less than unit cost',
-      function (value) {
-        const unitCost = parseFloat(this.parent.unitCost);
-        if (unitCost) {
-          // @ts-ignore
-          return parseFloat(value) >= unitCost;
-        }
-        return true;
-      }
-    ),
+  unitPrice: Yup.string()
+    .required('Unit price is required'),
+
   location: Yup.mixed().oneOf(
     ['store', 'counter'],
     "Valid location are 'store' or 'counter'"
   ),
+
+  description: Yup.string()
+    .min(5, 'Description should be at least 5 characters long')
+    .max(255, 'Description should not exceed 255 characters'),
 });
 
 export default PurchaseSchema;

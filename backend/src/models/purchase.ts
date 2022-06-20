@@ -21,12 +21,16 @@ interface PurchaseAttributes {
   unitPrice: number;
   location: string;
 
+  description?: string;
+  invoiceNo?: string;
+  totalPrice?: number;
+
   // foreign keys
   productId?: string;
   supplierId?: string;
 }
 
-type PurchaseCreationAttributes = Optional<PurchaseAttributes, 'id'>;
+type PurchaseCreationAttributes = Optional<PurchaseAttributes, 'id' | 'totalPrice' | 'invoiceNo'>;
 
 export class Purchase
   extends Model<PurchaseAttributes, PurchaseCreationAttributes>
@@ -37,6 +41,10 @@ export class Purchase
   declare unitCost: number;
   declare unitPrice: number;
   declare location: string;
+
+  declare description?: string;
+  declare invoiceNo?: string;
+  declare totalPrice?: number;
 
   // timestamps
   declare readonly createdAt: Date;
@@ -106,19 +114,35 @@ export const PurchaseFactory = (sequelize: Sequelize) => {
         defaultValue: 0,
       },
       unitCost: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0.0,
+        defaultValue: 0.00,
       },
       unitPrice: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0.0,
+        defaultValue: 0.00,
+      },
+      totalPrice: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        unique: false,
+        allowNull: true,
       },
       location: {
         type: DataTypes.ENUM('store'),
         allowNull: false,
         defaultValue: 'store',
+      },
+      invoiceNo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        defaultValue: 0,
       },
     },
     {

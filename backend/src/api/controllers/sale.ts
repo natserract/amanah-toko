@@ -32,7 +32,7 @@ async function sales(req: Request, res: Response, next: NextFunction) {
 
 async function create(req: Request, res: Response) {
   try {
-    const { productId, quantity, description } = req.body;
+    const { productId, quantity, description, unitPrice } = req.body;
     const product = await Product.findByPk(productId);
     if (product === null) {
       return res.status(400).json({

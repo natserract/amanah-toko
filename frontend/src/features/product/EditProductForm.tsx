@@ -212,7 +212,7 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
               >
                 <option value="">Pilih Kategori</option>
               </Select>
-              <TextArea name="description" label="Deskripsi" />
+              <TextArea name="description" label="Deskripsi" placeholder="Masukkan Deskripsi" />
 
               <button
                 type="submit"

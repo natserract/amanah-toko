@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { useAddNewPurchaseMutation } from './purchaseSlice';
 import { useGetProductsQuery } from '../product/productSlice';
 import { useGetSuppliersQuery } from '../supplier/supplierSlice';
-import { Input, Select } from '../../app/form/fields';
+import { Input, Select, CurrencyInput, TextArea } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import PurchaseSchema from './PurchaseSchema';
@@ -14,9 +14,15 @@ import { Message } from '../../app/index';
 
 export const AddPurchaseForm = () => {
   const [message, setMessage] = useState<Message | null>(null);
+  const [priceState, setPrice] = useState({
+    unitCost: 0,
+    unitPrice: 0
+  })
+
   const [addNewPurchase] = useAddNewPurchaseMutation();
   const allProducts = useGetProductsQuery('?limit=all');
   const allSuppliers = useGetSuppliersQuery('?limit=all');
+
   const products = useMemo(() => {
     if (allProducts.isSuccess && allProducts.data.products) {
       return allProducts.data.products.map((product: Product) => ({
@@ -26,6 +32,7 @@ export const AddPurchaseForm = () => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [allProducts.isSuccess, allProducts.data?.products]);
+
   const suppliers = useMemo(() => {
     if (allSuppliers.isSuccess && allSuppliers.data.suppliers) {
       return allSuppliers.data.suppliers.map((supplier: Supplier) => ({
@@ -35,6 +42,7 @@ export const AddPurchaseForm = () => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [allSuppliers.isSuccess, allSuppliers.data?.suppliers]);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -52,14 +60,21 @@ export const AddPurchaseForm = () => {
         unitCost: '',
         unitPrice: '',
         location: 'store',
+        description: '',
       }}
       validationSchema={PurchaseSchema}
+      validateOnChange
+
       onSubmit={async (values, actions) => {
+        const { unitCost, unitPrice, ...formValues } = values;
+
         try {
-          const { purchase, error, invalidData } = await addNewPurchase(
-            values
-          ).unwrap();
+          const { purchase, error, invalidData } = await addNewPurchase({
+            ...formValues,
+            ...priceState,
+          }).unwrap();
           actions.setSubmitting(false);
+
           if (purchase) {
             const message = {
               type: 'success',
@@ -111,20 +126,44 @@ export const AddPurchaseForm = () => {
               placeholder="Masukkan Jumlah Barang"
               required={true}
             />
-            <Input
+           <CurrencyInput
               name="unitCost"
               label="Harga Beli"
-              type="number"
-              placeholder="Masukkan Harga Beli"
+              placeholder="Masukkan Harga Pembelian"
               required={true}
+              onValueChange={(values) => {
+                const { floatValue } = values;
+
+                if (floatValue) {
+                  setPrice((state) => ({
+                    ...state,
+                    unitCost: floatValue
+                  }))
+                }
+              }}
             />
-            <Input
+            <CurrencyInput
               name="unitPrice"
               label="Harga Jual"
-              type="number"
               placeholder="Masukkan Harga Jual"
               required={true}
+              onValueChange={(values) => {
+                const { floatValue: unitPrice } = values;
+
+                if (unitPrice) {
+                  setPrice((state) => ({
+                    ...state,
+                    unitPrice
+                  }))
+                }
+              }}
             />
+            <TextArea
+              name="description"
+              label="Deskripsi"
+              placeholder="Masukkan Deskripsi"
+            />
+
             <button
               type="submit"
               className="btn btn-primary rounded-0 me-2 mt-3"
