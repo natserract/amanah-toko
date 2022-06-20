@@ -84,7 +84,6 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
   useEffect(() => {
     if (result.data?.purchase) {
       const { unitCost, unitPrice } = result.data.purchase
-      console.log('result.data.purchase', result.data.purchase)
 
       setPrice({
         unitCost: +unitCost,

@@ -5,6 +5,8 @@ import DataTable from '../../app/table/DataTable';
 import { Input } from '../../app/form/fields';
 import { Message } from '../../app/index';
 import { Category } from '../api';
+import { useParams } from 'react-router-dom';
+import { useGetCategoryQuery } from '../category/categorySlice';
 
 const ProductsSearchForm = () => (
   <Input
@@ -17,24 +19,22 @@ const ProductsSearchForm = () => (
   />
 );
 
-export const ProductsList = React.memo(() => {
+export const ProductsListCategory = React.memo(() => {
+  const params = useParams()
+
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState<Message | null>(null);
 
+  const category = useGetCategoryQuery((params as any)?.categoryId)
   const result = useGetProductsQuery(query);
   const [destroyProduct] = useDestroyProductMutation();
+
   const cols = useMemo(
     () => [
       { name: 'Nama', accessor: 'name', link: '/products/:id' },
       { name: 'Harga Beli', accessor: 'unitCost', type: 'price' },
       { name: 'Harga Jual', accessor: 'unitPrice', type: 'price' },
       { name: 'Jumlah Stok', accessor: 'store' },
-      {
-        name: 'Kategori',
-        accessor: 'category',
-        link: '/products/category/:categoryId',
-        callback: (category: Category) => category.name,
-      },
     ],
     []
   );
@@ -47,15 +47,18 @@ export const ProductsList = React.memo(() => {
 
   useEffect(() => {
     if (result.data?.error) {
-      setMessage({ type: 'danger', message: result.data.error });
+      setMessage({ type: 'danger', message: result.data?.error });
     }
-  }, [result.data?.error]);
+  }, [result, result.data?.error]);
 
   const handleQuery = useCallback((query: string) => {
-    if (query.length) {
-      setQuery(query);
+    if (query.length && Object.keys(params).length > 0) {
+      const { categoryId  } = params as {
+        categoryId: string
+      }
+      setQuery(`${query}&category=${categoryId}`);
     }
-  }, []);
+  }, [params]);
 
   const destroyChecked = useCallback(
     async (checked: string[]) => {
@@ -90,7 +93,7 @@ export const ProductsList = React.memo(() => {
           ? result.data.pagination
           : { count: 0 }
       }
-      title="Barang"
+      title={`Kategori ${category?.data?.category?.name}`}
       message={message}
       setMessage={setMessage}
       createItemLink="/products/create"

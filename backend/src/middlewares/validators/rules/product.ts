@@ -87,15 +87,21 @@ const commonRules = [
 export const productRules = {
   filter: [
     query('name').optional({ checkFalsy: true }).trim().escape(),
-
     queryWithFilter(
       'category',
-      async (categoryName) =>
-        await Category.findAll({
-          where: {
-            name: { [Op.like]: `%${categoryName}%` },
-          },
-        })
+      async (value) => {
+        try {
+          return await Category.findAll({
+            where: {
+              id: {
+                [Op.in]: [value]
+              }
+            },
+          })
+        } catch (error) {
+          return Promise.reject('Product not found');
+        }
+      }
     ),
 
     ...filters,

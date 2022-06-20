@@ -16,9 +16,9 @@ export function product(req: Request, res: Response, next: NextFunction) {
     });
   }
 
-  if (category) {
+  if (category?.length) {
     conditions.push({
-      categoryId: category,
+      categoryId: category
     });
   }
 

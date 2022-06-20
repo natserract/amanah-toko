@@ -17,6 +17,7 @@ import {
 } from './features/category';
 import {
   ProductsList,
+  ProductsListCategory,
   AddProductForm,
   EditProductForm,
 } from './features/product';
@@ -43,6 +44,7 @@ function App() {
           <Switch>
             <Route exact path="/" render={() => <Redirect to="/products" />} />
             <Route exact path="/products" component={ProductsList} />
+            <Route exact path="/products/category/:categoryId" component={ProductsListCategory} />
 
             <Route exact path="/categories" component={CategoriesList} />
             <Route
