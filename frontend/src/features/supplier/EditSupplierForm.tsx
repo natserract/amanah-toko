@@ -168,7 +168,7 @@ export const EditSupplierForm = ({ match }: RouteComponentProps<TParams>) => {
         id="deleteSupplier"
         label="deleteSupplierLabel"
         title="Hapus Supplier"
-        body="Apakah Anda yakin ingin menghapus supplier? Aksi ini tidak bisa di-undo"
+        body="Apakah Anda yakin ingin menghapus supplier?"
         handleAction={handleDestroy}
       />
     </>

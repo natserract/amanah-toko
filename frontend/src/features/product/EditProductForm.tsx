@@ -244,7 +244,7 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
   return (
     <>
       <FormCard
-        title="Edit Product"
+        title="Edit Barang"
         message={message}
         setMessage={setMessage}
         cardBody={form}
@@ -253,8 +253,8 @@ export const EditProductForm = ({ match }: RouteComponentProps<TParams>) => {
       <Modal
         id="deleteProduct"
         label="deleteProductLabel"
-        title="Delete Product"
-        body="Are you sure you want to delete this product? This action cannot be undone."
+        title="Hapus Barang"
+        body="Apakah Anda yakin ingin menghapus barang ini?"
         handleAction={handleDestroy}
       />
     </>

@@ -257,7 +257,7 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
   return (
     <>
       <FormCard
-        title="Edit Purchase"
+        title="Edit Pembelian"
         message={message}
         setMessage={setMessage}
         cardBody={form}
@@ -266,8 +266,8 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
       <Modal
         id="deletePurchase"
         label="deletePurchaseLabel"
-        title="Delete Purchase"
-        body="Are you sure you want to delete this purchase? This action cannot be undone."
+        title="Hapus Pembelian"
+        body="Apakah Anda yakin ingin menghapus pembelian ini?"
         handleAction={handleDestroy}
       />
     </>

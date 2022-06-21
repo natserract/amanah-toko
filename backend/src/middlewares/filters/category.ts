@@ -11,7 +11,7 @@ export function category(req: Request, res: Response, next: NextFunction) {
   if (name) {
     conditions.push({
       name: {
-        [Op.like]: `%${name}%`,
+        [Op.iLike]: `%${name}%`,
       },
     });
   }

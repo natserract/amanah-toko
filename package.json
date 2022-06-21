@@ -84,13 +84,16 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "hardenedRuntime": true,
-      "gatekeeperAssess": false
+      "gatekeeperAssess": false,
+      "icon": "build/icon.icns"
     },
     "dmg": {
       "sign": false,
       "artifactName": "${productName}-${version}.${ext}"
     },
     "win": {
+      "sign": false,
+      "publisherName": "Amanah Toko",
       "target": [
         {
           "target": "nsis",
@@ -103,6 +106,7 @@
       "icon": "./build/icon.ico"
     },
     "nsis": {
+      "installerIcon": "build/icon.ico",
       "artifactName": "${productName}-${version}.${ext}"
     },
     "afterSign": "electron-builder-notarize",

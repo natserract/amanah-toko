@@ -6,7 +6,7 @@ export default function Modal({
   title,
   body,
   handleAction,
-  actionLabel = 'Delete',
+  actionLabel = 'Hapus',
 }: ModalProps) {
   const modalHeader = (
     <div className="modal-header rounded-0 text-white bg-success">

@@ -67,6 +67,7 @@ export const openUpdateWindow = () => {
         './out/electron/preloads/wrapper-preload.js'
       ),
     },
+    icon: __dirname + "/Icon/Icon.icns"
   });
 
   newUpdateWindow.setMenuBarVisibility(false);
