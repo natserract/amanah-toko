@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useField, FieldMetaProps } from 'formik';
 import {
   FieldWrapperProps,
@@ -7,8 +7,15 @@ import {
   SelectFieldOption,
   DataListField,
   TextAreaField,
+  AutoCompleteField,
 } from './index';
 import NumberFormat, { NumberFormatProps } from 'react-number-format'
+
+import MUICheckbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import MUIAutocomplete from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const FieldWrapper = ({
   inline,
@@ -275,4 +282,79 @@ const TextArea: FC<TextAreaField> = ({
   );
 };
 
-export { Input, CurrencyInput, Checkbox, Select, DataList, TextArea };
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+const AutoComplete: FC<AutoCompleteField> = ({
+  label,
+  inline = false,
+  validation,
+  hidden,
+  options,
+  multiple = false,
+  ...props
+}) => {
+  const [ field, meta, helpers] = useField(props);
+  const { setValue } = helpers
+
+  const values = useRef<Set<string>>(new Set())
+
+  return (
+    <FieldWrapper
+      inline={inline}
+      idOrName={props.name}
+      label={label}
+      required={props.required}
+    >
+      <MUIAutocomplete
+        multiple={multiple}
+        options={options}
+        disableCloseOnSelect
+        getOptionLabel={(option) => option.label}
+        renderInput={(params) => (
+          <TextField {...params} {...field} label={label} placeholder={label} />
+        )}
+        onChange={(e, value) => {
+          if (value && Array.isArray(value)) {
+            let selectedValues: string[] = []
+
+            // :: Add values
+            value.length > 0 && value.forEach(val => {
+              values.current.add(val.value)
+              selectedValues = [...Array.from(values.current.values())]
+            })
+
+            // :: Remove values
+            selectedValues = selectedValues.filter(val2 => value.some(val => val.value === val2))
+
+            // :: Formik only accept string value, so we must stringify it!
+            if (selectedValues.length > 0) {
+              setValue(JSON.stringify(selectedValues), false)
+            } else {
+              setValue(null)
+            }
+          } else {
+            if (value) setValue(value?.value)
+          }
+        }}
+        renderOption={(props, option, { selected }) => (
+          <li {...props}>
+            <MUICheckbox
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+              checked={selected}
+            />
+            {option.label}
+          </li>
+        )}
+        sx={{
+          marginTop: 1,
+        }}
+      />
+      <ErrorMessage meta={meta} />
+    </FieldWrapper>
+  )
+}
+
+export { Input, CurrencyInput, Checkbox, Select, DataList, TextArea, AutoComplete };

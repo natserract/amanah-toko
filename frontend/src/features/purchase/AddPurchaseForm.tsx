@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { useAddNewPurchaseMutation } from './purchaseSlice';
 import { useGetProductsQuery } from '../product/productSlice';
 import { useGetSuppliersQuery } from '../supplier/supplierSlice';
-import { Input, Select, CurrencyInput, TextArea } from '../../app/form/fields';
+import { Input, Select, CurrencyInput, TextArea, AutoComplete } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import PurchaseSchema from './PurchaseSchema';
@@ -111,14 +111,14 @@ export const AddPurchaseForm = () => {
             >
               <option value="">Pilih Supplier</option>
             </Select>
-            <Select
+
+            <AutoComplete
+              options={products}
               name="productId"
               label="Pilih Barang"
-              options={products}
               required={true}
-            >
-              <option value="">Pilih Barang</option>
-            </Select>
+            />
+
             <Input
               name="quantity"
               label="Jumlah Barang"

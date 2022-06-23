@@ -1,4 +1,5 @@
 import React, { InputHTMLAttributes } from 'react';
+import MUIAutocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 
 interface FieldProps {
   label: string;
@@ -41,4 +42,12 @@ export interface FieldWrapperProps {
   required?: boolean;
   children: React.ReactNode;
   hidden?: boolean;
+}
+
+
+export interface AutoCompleteField extends InputField, Partial<AutocompleteProps> {
+  options: {
+    value: string;
+    label: string
+  }[]
 }
