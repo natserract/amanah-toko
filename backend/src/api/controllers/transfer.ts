@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import { enumFromStringValue } from '../../libs/common';
 import { db } from '../../models';
+import { Source } from '../../models/transfer'
 
 const { sequelize } = db;
 const { Transfer, Product } = db;
@@ -32,7 +34,11 @@ async function transfers(req: Request, res: Response, next: NextFunction) {
 
 async function create(req: Request, res: Response) {
   try {
-    const { productId, quantity, source, destination } = req.body;
+    const { productId, quantity } = req.body;
+
+    const source = enumFromStringValue(Source, req.body.source) ?? Source.STORE
+    const destination = enumFromStringValue(Source, req.body.destination) ?? Source.STORE
+
     const product = await Product.findByPk(productId);
     if (product === null) {
       return res.status(400).json({

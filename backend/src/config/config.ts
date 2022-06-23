@@ -1,5 +1,6 @@
 /* eslint-disable no-var */
 import { Dialect, Sequelize } from 'sequelize';
+
 import 'dotenv/config';
 
 var sequelize: Sequelize;
@@ -34,6 +35,7 @@ if (env === 'production') {
   sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     host: DB_HOST,
     dialect: DB_DIALECT,
+    logging: true,
   });
 }
 

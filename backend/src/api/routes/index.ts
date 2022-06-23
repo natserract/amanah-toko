@@ -5,9 +5,11 @@ import { router as purchaseRoutes } from './purchase.js';
 import { router as saleRoutes } from './sale.js';
 import { router as supplierRoutes } from './supplier.js';
 import { router as transferRoutes } from './transfer.js';
+import { router as dashboardRoutes } from './dashboard.js'
 
 export const router = express.Router();
 
+router.use('/dashboard', dashboardRoutes)
 router.use('/categories', categoryRoutes);
 router.use('/products', productRoutes);
 router.use('/purchases', purchaseRoutes);

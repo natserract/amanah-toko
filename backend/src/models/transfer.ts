@@ -11,11 +11,15 @@ import {
 import { Product } from './product.js';
 import { Models } from './types';
 
+export enum Source {
+  STORE = 'store'
+}
+
 interface TransferAttributes {
   id: string;
   quantity: number;
-  source: string;
-  destination: string;
+  source: Source;
+  destination: Source;
 
   // foreign key
   productId?: string;
@@ -29,8 +33,8 @@ export class Transfer
 {
   declare id: string;
   declare quantity: number;
-  declare source: string;
-  declare destination: string;
+  declare source: Source;
+  declare destination: Source;
 
   // timestamps
   declare readonly createdAt: Date;
@@ -81,17 +85,27 @@ export const TransferFactory = (sequelize: Sequelize) => {
         defaultValue: 0,
       },
       source: {
-        type: DataTypes.ENUM('store'),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       destination: {
-        type: DataTypes.ENUM('store'),
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },
     {
       tableName: 'transfers',
       sequelize,
+      indexes: [
+        {
+          unique: true,
+          fields: ['source'],
+        },
+        {
+          unique: true,
+          fields: ['destination'],
+        },
+      ],
     }
   );
 };

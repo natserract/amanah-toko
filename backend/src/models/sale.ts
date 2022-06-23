@@ -20,6 +20,8 @@ interface SaleAttributes {
 
   // foreign key
   productId?: string;
+
+  createdAt?: Date | string | null | undefined;
 }
 
 type SaleCreationAttributes = Optional<SaleAttributes, 'id' | 'totalPrice' | 'invoiceNo'>;
@@ -81,7 +83,6 @@ export const SaleFactory = (sequelize: Sequelize) => {
       invoiceNo: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         defaultValue: 0,
       },
       totalPrice: {
@@ -96,13 +97,18 @@ export const SaleFactory = (sequelize: Sequelize) => {
       },
       description: {
         type: DataTypes.TEXT,
-        unique: false,
         allowNull: true,
       },
     },
     {
       tableName: 'sales',
       sequelize,
+      indexes: [
+        {
+          unique: true,
+          fields: ['invoiceNo'],
+        },
+      ],
     }
   );
 };
