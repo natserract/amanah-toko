@@ -103,14 +103,12 @@ export const AddPurchaseForm = () => {
       {(props) => (
         <>
           <form onSubmit={props.handleSubmit}>
-            <Select
+            <AutoComplete
+              options={suppliers}
               name="supplierId"
               label="Pilih Supplier"
-              options={suppliers}
               required={true}
-            >
-              <option value="">Pilih Supplier</option>
-            </Select>
+            />
 
             <AutoComplete
               options={products}

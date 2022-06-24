@@ -1,5 +1,5 @@
 import React, { InputHTMLAttributes } from 'react';
-import MUIAutocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
+import MUIAutocomplete, { AutocompleteProps,  } from '@mui/material/Autocomplete';
 
 interface FieldProps {
   label: string;
@@ -45,9 +45,13 @@ export interface FieldWrapperProps {
 }
 
 
-export interface AutoCompleteField extends InputField, Partial<AutocompleteProps> {
+export interface AutoCompleteField extends Omit<InputField, 'defaultValue'>, Partial<AutocompleteProps> {
   options: {
     value: string;
     label: string
-  }[]
+  }[],
+  defaultValue?: {
+    value: string;
+    label: string;
+  }
 }

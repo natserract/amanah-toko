@@ -9,7 +9,7 @@ import {
 } from './purchaseSlice';
 import { useGetSuppliersQuery } from '../supplier/supplierSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select, CurrencyInput, TextArea } from '../../app/form/fields';
+import { Input, Select, CurrencyInput, TextArea, AutoComplete } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import Modal from '../../app/modal/Modal';
 import Spinner from '../../app/spinners/Spinner';
@@ -26,8 +26,10 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
   const result = useGetPurchaseQuery(purchaseId);
   const [updatePurchase] = useEditPurchaseMutation();
   const [destroyPurchase] = useDestroyPurchaseMutation();
+
   const allProducts = useGetProductsQuery('?limit=all');
   const allSuppliers = useGetSuppliersQuery('?limit=all');
+
   const products = useMemo(() => {
     if (allProducts.isSuccess && allProducts.data.products) {
       return allProducts.data.products.map((product: Product) => ({
@@ -37,6 +39,7 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
     }
     return [{ value: '', label: 'No results found' }];
   }, [allProducts.isSuccess, allProducts.data?.products]);
+
   const suppliers = useMemo(() => {
     if (allSuppliers.isSuccess && allSuppliers.data.suppliers) {
       return allSuppliers.data.suppliers.map((supplier: Supplier) => ({
@@ -92,6 +95,8 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
     }
   }, [result.data])
 
+  console.log('initialValues', initialValues)
+
   const handleDestroy = useCallback(async () => {
     if (purchaseId.length) {
       try {
@@ -115,6 +120,24 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
       }
     }
   }, [purchaseId, history, destroyPurchase]);
+
+  const currentProduct = useMemo(() => {
+    if (initialValues.productId) {
+      return products.find(product => {
+        return product.value === initialValues?.productId
+      })
+    }
+    return undefined
+  }, [products, initialValues])
+
+  const currentSupplier = useMemo(() => {
+    if (initialValues.supplierId) {
+      return suppliers.find(supplier => {
+        return supplier.value === initialValues.supplierId
+      })
+    }
+    return undefined
+  }, [suppliers, initialValues])
 
   const form = (
     <Formik
@@ -170,22 +193,26 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
             <Spinner />
           ) : (
             <form onSubmit={props.handleSubmit}>
-              <Select
-                name="supplierId"
-                label="Pilih Supplier"
-                options={suppliers}
-                required={true}
-              >
-                <option value="">Pilih supplier</option>
-              </Select>
-              <Select
-                name="productId"
-                label="Pilih Barang"
-                options={products}
-                required={true}
-              >
-                <option value="">Pilih barang</option>
-              </Select>
+              {currentSupplier ? (
+                <AutoComplete
+                  defaultValue={currentSupplier}
+                  options={suppliers}
+                  name="supplierId"
+                  label="Pilih Supplier"
+                  required={true}
+                />
+              ) : "Loading..."}
+
+              {currentProduct ? (
+                <AutoComplete
+                  defaultValue={currentProduct}
+                  options={products}
+                  name="productId"
+                  label="Pilih Barang"
+                  required={true}
+                />
+              ) : "Loading..."}
+
               <Input
                 name="quantity"
                 label="Jumlah"

@@ -292,6 +292,7 @@ const AutoComplete: FC<AutoCompleteField> = ({
   hidden,
   options,
   multiple = false,
+  defaultValue,
   ...props
 }) => {
   const [ field, meta, helpers] = useField(props);
@@ -307,10 +308,11 @@ const AutoComplete: FC<AutoCompleteField> = ({
       required={props.required}
     >
       <MUIAutocomplete
+        defaultValue={defaultValue}
         multiple={multiple}
         options={options}
-        disableCloseOnSelect
-        getOptionLabel={(option) => option.label}
+        disableCloseOnSelect={multiple}
+        getOptionLabel={(option) => option.label!}
         renderInput={(params) => (
           <TextField {...params} {...field} label={label} placeholder={label} />
         )}
@@ -320,7 +322,7 @@ const AutoComplete: FC<AutoCompleteField> = ({
 
             // :: Add values
             value.length > 0 && value.forEach(val => {
-              values.current.add(val.value)
+              values.current.add(val.value!)
               selectedValues = [...Array.from(values.current.values())]
             })
 
@@ -337,8 +339,8 @@ const AutoComplete: FC<AutoCompleteField> = ({
             if (value) setValue(value?.value)
           }
         }}
-        renderOption={(props, option, { selected }) => (
-          <li {...props}>
+        renderOption={(props2, option, { selected }) => (
+          <li {...props2}>
             <MUICheckbox
               icon={icon}
               checkedIcon={checkedIcon}
