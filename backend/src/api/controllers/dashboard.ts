@@ -9,11 +9,14 @@ async function reports(req: Request, res: Response, next: NextFunction) {
     const {
       startsAt,
       endsAt,
+      by,
     } = req.query as {
       startsAt: Date | string;
       endsAt: Date | string;
+      by: "purchaseBySupplier" | "salesByProduct"
     }
     const isHasBetweenDate = Boolean(startsAt && endsAt)
+    const isHasBy = Boolean(by)
 
     // :: Reports Sales by month
     const reportsSales = await Sale.findAll({
@@ -22,8 +25,28 @@ async function reports(req: Request, res: Response, next: NextFunction) {
         [sequelize.fn('sum', sequelize.col('totalPrice')), 'total'],
         [sequelize.fn('to_char', sequelize.col(`"Sale"."createdAt"`), 'MM'), 'month']
       ],
+
       group: [
         sequelize.fn('to_char', sequelize.col(`"Sale"."createdAt"`), 'MM'),
+      ],
+
+      // :: Reports Sales by month/date range
+      ...(isHasBetweenDate && {
+        where: {
+          createdAt: {
+            [Op.between]: [startsAt, endsAt]
+           }
+        }
+      })
+    })
+
+    const reportsSalesByProduct = await Sale.findAll({
+      attributes: [
+        [sequelize.fn('count', sequelize.col('productId')), 'productCount'],
+        [sequelize.fn('sum', sequelize.col('totalPrice')), 'total'],
+      ],
+
+      group: [
         "product.id"
       ],
       include: {
@@ -50,15 +73,23 @@ async function reports(req: Request, res: Response, next: NextFunction) {
         [sequelize.fn('sum', sequelize.col('totalPrice')), 'total'],
         [sequelize.fn('to_char', sequelize.col(`"Purchase"."createdAt"`), 'MM'), 'month']
       ],
-      group: [
-        sequelize.fn('to_char', sequelize.col(`"Purchase"."createdAt"`), 'MM'),
-        "supplier.id"
-      ],
-      include: {
-        model: Supplier,
-        as: 'supplier',
-        attributes: ['name']
-      },
+
+      // Filter purchase by conditions (by supplier)
+      ...(isHasBy && by == 'purchaseBySupplier' ? {
+        group: [
+          sequelize.fn('to_char', sequelize.col(`"Purchase"."createdAt"`), 'MM'),
+          "supplier.id"
+        ],
+        include: {
+          model: Supplier,
+          as: 'supplier',
+          attributes: ['name']
+        },
+      } : {
+        group: [
+          sequelize.fn('to_char', sequelize.col(`"Purchase"."createdAt"`), 'MM'),
+        ]
+      }),
 
       // :: Reports Purchases by month/date range
       ...(isHasBetweenDate && {
@@ -72,6 +103,7 @@ async function reports(req: Request, res: Response, next: NextFunction) {
 
     return res.status(200).json({
       sales: reportsSales,
+      salesByProduct: reportsSalesByProduct,
       purchases: reportsPurchases,
     });
 

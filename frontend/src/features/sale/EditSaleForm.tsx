@@ -9,7 +9,7 @@ import {
   useDestroySaleMutation,
 } from './salesSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select, TextArea } from '../../app/form/fields';
+import { Input, Select, TextArea, AutoComplete } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import Modal from '../../app/modal/Modal';
 import Spinner from '../../app/spinners/Spinner';
@@ -118,6 +118,15 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
     }
   }, [saleId, history, cancelSale]);
 
+  const currentProduct = useMemo(() => {
+    if (initialValues.productId) {
+      return products.find(product => {
+        return product.value === initialValues?.productId
+      })
+    }
+    return undefined
+  }, [products, initialValues])
+
   const form = (
     <Formik
       enableReinitialize={true}
@@ -129,6 +138,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
         }
 
         try {
+          console.log('Sbumitted', values)
           const { sale, error, invalidData } = await updateSale(
             values
           ).unwrap();
@@ -136,7 +146,7 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
           if (sale) {
             const message = {
               type: 'success',
-              message: 'Sale updated successfully',
+              message: 'Data penjualan berhasil di update',
             };
             history.push({
               pathname: '/sales',
@@ -164,14 +174,16 @@ export const EditSaleForm = ({ match }: RouteComponentProps<TParams>) => {
             <Spinner />
           ) : (
             <form onSubmit={props.handleSubmit}>
-              <Select
-                name="productId"
-                label="Pilih Produk"
-                options={products}
-                required={true}
-              >
-                <option value="">Pilih Produk</option>
-              </Select>
+              {currentProduct ? (
+                <AutoComplete
+                  defaultValue={currentProduct}
+                  options={products}
+                  name="productId"
+                  label="Pilih Barang"
+                  required={true}
+                />
+              ) : "Loading..."}
+
               <Input
                 name="quantity"
                 label="Jumlah"

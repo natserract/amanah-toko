@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 
 import { useAddNewSaleMutation } from './salesSlice';
 import { useGetProductsQuery } from '../product/productSlice';
-import { Input, Select, TextArea} from '../../app/form/fields';
+import { Input, Select, TextArea, AutoComplete } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import SaleSchema from './SaleSchema';
@@ -77,14 +77,13 @@ export const AddSaleForm = () => {
       {(props) => (
         <>
           <form onSubmit={props.handleSubmit}>
-            <Select
-              name="productId"
-              label="Pilih Produk"
+            <AutoComplete
               options={products}
+              name="productId"
+              label="Pilih Barang"
               required={true}
-            >
-              <option value="">Pilih Produk</option>
-            </Select>
+            />
+
             <Input
               name="quantity"
               label="Jumlah"

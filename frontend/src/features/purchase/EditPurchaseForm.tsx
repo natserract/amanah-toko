@@ -165,7 +165,7 @@ export const EditPurchaseForm = ({ match }: RouteComponentProps<TParams>) => {
           if (purchase) {
             const message = {
               type: 'success',
-              message: 'Purchase updated successfully',
+              message: 'Data pembelian berhasil di update',
             };
             history.push({
               pathname: '/purchases',

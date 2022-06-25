@@ -142,7 +142,7 @@ async function read(req: Request, res: Response, next: NextFunction) {
 
 async function update(req: Request, res: Response) {
   try {
-    const { id, quantity, description } = req.body;
+    const { id, quantity, description, productId } = req.body;
 
     const sale = await Sale.findByPk(id);
     if (sale === null) {
@@ -178,7 +178,7 @@ async function update(req: Request, res: Response) {
         }
       );
       const [affectedSaleRows] = await Sale.update(
-        { quantity, description, totalPrice },
+        { quantity, description, totalPrice, productId },
         {
           where: { id },
           transaction: t,
