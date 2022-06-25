@@ -20,7 +20,7 @@ export const supplierApi = emptySplitApi.injectEndpoints({
           return response.ok;
         },
       }),
-      providesTags: (result, error, arg) => {
+      providesTags: (result) => {
         if (result?.suppliers) {
           return [
             'Supplier',

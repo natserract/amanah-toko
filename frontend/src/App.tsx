@@ -9,7 +9,7 @@ import {
 import Navbar from './app/Navbar';
 import { ScrollTop } from './app/ScrollTop';
 import { Footer } from './app/Footer';
-import Home from './Home';
+import Dashboard from './Dashboard';
 import {
   CategoriesList,
   AddCategoryForm,
@@ -42,9 +42,18 @@ function App() {
           <Navbar />
           <ScrollTop />
           <Switch>
-            <Route exact path="/" render={() => <Redirect to="/products" />} />
+            <Route exact path="/" render={() => <Redirect to={`/dashboard`}/>} />
+
+            <Route exact path="/dashboard" component={Dashboard} />
+
             <Route exact path="/products" component={ProductsList} />
             <Route exact path="/products/category/:categoryId" component={ProductsListCategory} />
+            <Route exact path="/products/create" component={AddProductForm} />
+            <Route
+              exact
+              path="/products/:productId"
+              component={EditProductForm}
+            />
 
             <Route exact path="/categories" component={CategoriesList} />
             <Route
@@ -56,13 +65,6 @@ function App() {
               exact
               path="/categories/:categoryId"
               component={EditCategoryForm}
-            />
-
-            <Route exact path="/products/create" component={AddProductForm} />
-            <Route
-              exact
-              path="/products/:productId"
-              component={EditProductForm}
             />
 
             <Route exact path="/purchases" component={PurchasesList} />

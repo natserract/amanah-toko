@@ -7,7 +7,7 @@ export const emptySplitApi = createApi({
   }), {
     maxRetries: 3
   }),
-  tagTypes: ['Category', 'Product', 'Purchase', 'Sale', 'Supplier', 'Transfer'],
+  tagTypes: ['Report', 'Category', 'Product', 'Purchase', 'Sale', 'Supplier', 'Transfer'],
   endpoints: () => ({}),
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 10,

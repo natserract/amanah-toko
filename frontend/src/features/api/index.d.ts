@@ -83,8 +83,10 @@ interface RemoveFields {
   purchases?: never;
   sale?: never;
   sales?: never;
+  salesByProduct?: never;
   supplier?: never;
   suppliers?: never;
+  reports?: never;
   transfer?: never;
   transfers?: never;
 }
@@ -161,6 +163,27 @@ export interface SupplierState extends RemoveErrors {
 
 export interface Suppliers extends ItemsList {
   suppliers: Supplier[];
+  error?: never;
+}
+
+interface ReportsAttributes {
+  productCount: number;
+  total: number;
+  month: string;
+}
+export interface Reports {
+  sales?: Array<ReportsAttributes>;
+  salesByProduct?: Array<Omit<ReportsAttributes, 'month'> & {
+    product?: {
+      name: string;
+    }
+  }>;
+  purchases?: Array<ReportsAttributes & {
+    supplier?: {
+      name: string;
+    };
+    supplierCount?: string;
+  }>;
   error?: never;
 }
 

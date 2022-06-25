@@ -14,3 +14,9 @@ export function toRupiah(price: number, prefix = '.') {
       }, '')
   );
 }
+
+export const numberFormat = (num: number) => {
+  return num.toLocaleString(
+    'id-ID', { style: 'currency', currency:'IDR', minimumFractionDigits: 0 }
+  )
+}
