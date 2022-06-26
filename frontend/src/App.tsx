@@ -25,8 +25,9 @@ import {
   PurchasesList,
   AddPurchaseForm,
   EditPurchaseForm,
+  Invoice as InvoicePurchase
 } from './features/purchase';
-import { SalesList, AddSaleForm, EditSaleForm } from './features/sale';
+import { SalesList, AddSaleForm, EditSaleForm, Invoice as InvoiceSale } from './features/sale';
 import {
   SuppliersList,
   AddSupplierForm,
@@ -74,10 +75,12 @@ function App() {
               path="/purchases/:purchaseId"
               component={EditPurchaseForm}
             />
+            <Route exact path="/purchases/invoice/:purchaseId" component={InvoicePurchase} />
 
             <Route exact path="/sales" component={SalesList} />
             <Route exact path="/sales/create" component={AddSaleForm} />
             <Route exact path="/sales/:saleId" component={EditSaleForm} />
+            <Route exact path="/sales/invoice/:saleId" component={InvoiceSale} />
 
             <Route exact path="/suppliers" component={SuppliersList} />
             <Route exact path="/suppliers/create" component={AddSupplierForm} />

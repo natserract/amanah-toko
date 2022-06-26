@@ -2,10 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useGetReportsQuery } from './dashboardSlice';
 import { months } from './constants/month';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { Reports } from './features/api';
-import { numberFormat } from './utils/currency';
+import { averageNum, numberFormat, toRupiah } from './utils/currency';
 import CustomTooltip from './app/charts/CustomTooltip';
+
+const centerSx = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '30px 0',
+}
 
 const ChartHeader = ({
   title,
@@ -52,6 +59,16 @@ const ChartHeader = ({
         </select>
     </div>
   )
+}
+
+const totalPrice = (items: any[]) => {
+  if (items && items.length > 0) {
+    if (items.length === 1) {
+      return items[0].total;
+    } else {
+      return items.reduce((acc, curr) => acc.total + curr.total);
+    }
+  }
 }
 
 const Dashboard = () => {
@@ -131,6 +148,19 @@ const Dashboard = () => {
       setSalesByProductChartData(salesByProduct)
     }
   }, [result])
+
+  const getAverage = (items: any[]) => {
+    if (items) {
+      const price = averageNum(
+        totalPrice(items),
+        items?.length
+      )
+      console.log('price', totalPrice(items))
+      return toRupiah(price)
+    }
+
+    return '-'
+  }
 
   useEffect(applyChartData, [applyChartData])
 
@@ -214,6 +244,13 @@ const Dashboard = () => {
                 )}
               </CustomTooltip>
             ) }/>
+            <Legend
+              content={() => (
+                <div style={{...centerSx}}>
+                  <label>Rata-rata pengeluaran: {getAverage(purchasesChartData!)}</label>
+                </div>
+              )}
+            />
             <Bar dataKey="productCount" maxBarSize={20} fill="#82ca9d" />
             <Bar dataKey="total" maxBarSize={20} fill="#8884d8" />
           </BarChart>
@@ -272,6 +309,13 @@ const Dashboard = () => {
                 )}
               </CustomTooltip>
             ) }/>
+            <Legend
+              content={() => (
+                <div style={{...centerSx}}>
+                  <label>Rata-rata pendapatan: {getAverage(salesChartData!)}</label>
+                </div>
+              )}
+            />
             <Bar dataKey="productCount" maxBarSize={20} fill="#82ca9d" />
             <Bar dataKey="total" maxBarSize={20} fill="#8884d8" />
           </BarChart>
@@ -330,6 +374,13 @@ const Dashboard = () => {
                 )}
               </CustomTooltip>
             ) }/>
+            <Legend
+              content={() => (
+                <div style={{...centerSx}}>
+                  <label>Rata-rata pendapatan: {getAverage(salesChartData!)}</label>
+                </div>
+              )}
+            />
             <Bar dataKey="productCount" maxBarSize={20} fill="#82ca9d" />
             <Bar dataKey="total" maxBarSize={20} fill="#8884d8" />
           </BarChart>

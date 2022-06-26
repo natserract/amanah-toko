@@ -20,3 +20,12 @@ export const numberFormat = (num: number) => {
     'id-ID', { style: 'currency', currency:'IDR', minimumFractionDigits: 0 }
   )
 }
+
+
+export const averageNum = (total: number, length: number) => {
+  if (length > 0) {
+    return total / length
+  }
+
+  return total
+}

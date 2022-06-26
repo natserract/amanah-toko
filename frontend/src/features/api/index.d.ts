@@ -37,6 +37,8 @@ export interface DraftPurchase {
   productId: string;
   supplierId: string;
   isNewProduct?: boolean;
+  invoice_no?: string | number;
+  totalPrice?: string | number;
 }
 
 export interface Purchase extends DraftPurchase, CommonFields {
@@ -58,6 +60,7 @@ export interface DraftSale {
   productId: string;
   quantity: string | number;
   description?: string;
+  invoice_no?: string | number;
 }
 
 export interface Sale extends DraftSale, CommonFields {
