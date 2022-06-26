@@ -10,7 +10,6 @@ export const ProductSchema = Yup.object().shape({
   unitCost: Yup.string()
     .required('Unit cost is required'),
 
-
   unitPrice: Yup.string()
     .required('Unit price is required')
     .test(
@@ -31,6 +30,10 @@ export const ProductSchema = Yup.object().shape({
     .required('Number of items in store is required')
     .positive('Items in store cannot be negative')
     .integer('Items in store must be an integer'),
+
+  categoryId: Yup.string()
+    .typeError('Category is required')
+    .required('Category is required'),
 
   description: Yup.string()
     .min(5, 'Description should be at least 5 characters long')

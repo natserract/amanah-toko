@@ -1,16 +1,17 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 
 import { useAddNewPurchaseMutation } from './purchaseSlice';
-import { useGetProductsQuery } from '../product/productSlice';
+import { useAddNewProductMutation, useGetProductsQuery } from '../product/productSlice';
 import { useGetSuppliersQuery } from '../supplier/supplierSlice';
-import { Input, Select, CurrencyInput, TextArea, AutoComplete } from '../../app/form/fields';
+import { Input, Select, CurrencyInput, TextArea, AutoComplete, Checkbox } from '../../app/form/fields';
 import FormCard from '../../app/card/FormCard';
 import ButtonSpinner from '../../app/spinners/ButtonSpinner';
 import PurchaseSchema from './PurchaseSchema';
-import { Product, Supplier } from '../api';
+import { Category, Product, Supplier } from '../api';
 import { Message } from '../../app/index';
+import { useGetCategoriesQuery } from '../category/categorySlice';
 
 export const AddPurchaseForm = () => {
   const [message, setMessage] = useState<Message | null>(null);
@@ -20,8 +21,27 @@ export const AddPurchaseForm = () => {
   })
 
   const [addNewPurchase] = useAddNewPurchaseMutation();
+  const [addNewProduct] = useAddNewProductMutation();
+
   const allProducts = useGetProductsQuery('?limit=all');
   const allSuppliers = useGetSuppliersQuery('?limit=all');
+  const allCategories = useGetCategoriesQuery('?limit=all');
+
+  const [isNewProduct, setIsNewProduct] = useState(false);
+
+  const initialValues = {
+    supplierId: '',
+    productId: '',
+    quantity: '',
+    unitCost: '',
+    unitPrice: '',
+    location: 'store',
+    description: '',
+
+    // :: product state
+    name: '',
+    categoryId: '',
+  }
 
   const products = useMemo(() => {
     if (allProducts.isSuccess && allProducts.data.products) {
@@ -43,7 +63,121 @@ export const AddPurchaseForm = () => {
     return [{ value: '', label: 'No results found' }];
   }, [allSuppliers.isSuccess, allSuppliers.data?.suppliers]);
 
+  const categories = useMemo(() => {
+    if (allCategories.isSuccess && allCategories.data.categories) {
+      return allCategories.data.categories.map((category: Category) => ({
+        value: category.id,
+        label: category.name,
+      }));
+    }
+
+    return [{ value: '', label: 'No results found' }];
+  }, [allCategories.isSuccess, allCategories.data?.categories]);
+
   const history = useHistory();
+
+  const handleSubmit = useCallback(async(
+    values: typeof initialValues,
+    actions: FormikHelpers<typeof initialValues>
+  ) => {
+    const { unitCost, unitPrice, ...formValues } = values;
+
+    const errorHandler = (
+      error: string | undefined,
+      invalidData: { [k: string]: string } | undefined
+    ) => {
+      if (error) {
+        setMessage({ type: 'danger', message: error });
+      }
+      if (invalidData) {
+        actions.setErrors(invalidData);
+        setMessage({
+          type: 'danger',
+          message: 'Harap check kembali errors dibawah ini',
+        });
+      }
+    }
+
+    try {
+      if (isNewProduct) {
+        const formValuesProduct = {
+          ...formValues,
+          ...priceState,
+          store: formValues.quantity,
+        }
+        const {
+          product,
+          error: errProduct,
+          invalidData: invalidDataProduct
+        } = await addNewProduct(
+          {
+            ...formValuesProduct,
+            ...(values.description && {
+              description: values.description
+            })
+          }
+        ).unwrap();
+
+        if (product) {
+          const {
+            purchase,
+            error: errPurch,
+            invalidData: invalidDataPurch
+          } = await addNewPurchase({
+            ...formValues,
+            ...priceState,
+            productId: product.id,
+            isNewProduct: true,
+          }).unwrap()
+          actions.setSubmitting(false);
+
+          if (purchase) {
+            const message = {
+              type: 'success',
+              message: 'Data pembelian berhasil dibuat',
+            };
+            history.push({
+              pathname: '/purchases',
+              state: { message },
+            });
+          }
+          errorHandler(errPurch, invalidDataPurch)
+        }
+        errorHandler(errProduct, invalidDataProduct)
+      }
+
+      const {
+        purchase,
+        error: errPurch,
+        invalidData: invalidDataPurch
+      } = await addNewPurchase({
+        ...formValues,
+        ...priceState,
+        isNewProduct: false,
+      }).unwrap();
+      actions.setSubmitting(false);
+
+      if (purchase) {
+        const message = {
+          type: 'success',
+          message: 'Data pembelian berhasil dibuat',
+        };
+        history.push({
+          pathname: '/purchases',
+          state: { message },
+        });
+      }
+      errorHandler(errPurch, invalidDataPurch)
+    } catch (error) {
+      setMessage({ type: 'danger', message: error.message });
+    }
+  }, [
+    addNewProduct,
+    addNewPurchase,
+    history,
+    isNewProduct,
+    priceState
+  ])
 
   useEffect(() => {
     if (message?.type && message?.message) {
@@ -53,52 +187,10 @@ export const AddPurchaseForm = () => {
 
   const form = (
     <Formik
-      initialValues={{
-        supplierId: '',
-        productId: '',
-        quantity: '',
-        unitCost: '',
-        unitPrice: '',
-        location: 'store',
-        description: '',
-      }}
+      initialValues={initialValues}
       validationSchema={PurchaseSchema}
       validateOnChange
-
-      onSubmit={async (values, actions) => {
-        const { unitCost, unitPrice, ...formValues } = values;
-
-        try {
-          const { purchase, error, invalidData } = await addNewPurchase({
-            ...formValues,
-            ...priceState,
-          }).unwrap();
-          actions.setSubmitting(false);
-
-          if (purchase) {
-            const message = {
-              type: 'success',
-              message: 'Purchase created successfully',
-            };
-            history.push({
-              pathname: '/purchases',
-              state: { message },
-            });
-          }
-          if (error) {
-            setMessage({ type: 'danger', message: error });
-          }
-          if (invalidData) {
-            actions.setErrors(invalidData);
-            setMessage({
-              type: 'danger',
-              message: 'Please correct the errors below',
-            });
-          }
-        } catch (error) {
-          setMessage({ type: 'danger', message: error.message });
-        }
-      }}
+      onSubmit={handleSubmit}
     >
       {(props) => (
         <>
@@ -110,12 +202,32 @@ export const AddPurchaseForm = () => {
               required={true}
             />
 
-            <AutoComplete
-              options={products}
-              name="productId"
-              label="Pilih Barang"
-              required={true}
+            <Checkbox
+              label='Buat barang baru'
+              name="isNewProduct"
+              onChange={(event) => {
+                const checked = event.target.checked;
+                setIsNewProduct(checked);
+              }}
             />
+
+            {isNewProduct ? (
+              <Input
+                name="name"
+                label="Nama"
+                type="text"
+                placeholder="Masukkan Nama Barang"
+                required={true}
+              />
+            ) : (
+              <AutoComplete
+                options={products}
+                name="productId"
+                label="Pilih Barang"
+                required={true}
+                disabled={isNewProduct}
+              />
+            )}
 
             <Input
               name="quantity"
@@ -156,6 +268,18 @@ export const AddPurchaseForm = () => {
                 }
               }}
             />
+
+            {isNewProduct && (
+              <Select
+                name="categoryId"
+                label="Kategori"
+                options={categories}
+                required={true}
+              >
+               <option value="">Pilih Kategori</option>
+              </Select>
+            )}
+
             <TextArea
               name="description"
               label="Deskripsi"

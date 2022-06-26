@@ -293,6 +293,7 @@ const AutoComplete: FC<AutoCompleteField> = ({
   options,
   multiple = false,
   defaultValue,
+  disabled,
   ...props
 }) => {
   const [ field, meta, helpers] = useField(props);
@@ -350,9 +351,8 @@ const AutoComplete: FC<AutoCompleteField> = ({
             {option.label}
           </li>
         )}
-        sx={{
-          marginTop: 1,
-        }}
+        sx={{ marginTop: 1 }}
+        disabled={disabled}
       />
       <ErrorMessage meta={meta} />
     </FieldWrapper>

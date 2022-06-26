@@ -26,7 +26,7 @@ interface PurchaseAttributes {
   location: Location;
 
   description?: string;
-  invoiceNo?: string;
+  invoice_no?: string;
   totalPrice?: number;
 
   // foreign keys
@@ -37,7 +37,7 @@ interface PurchaseAttributes {
   updatedAt?: Date | string | null | undefined;
 }
 
-type PurchaseCreationAttributes = Optional<PurchaseAttributes, 'id' | 'totalPrice' | 'invoiceNo'>;
+type PurchaseCreationAttributes = Optional<PurchaseAttributes, 'id' | 'totalPrice' | 'invoice_no'>;
 
 export class Purchase
   extends Model<PurchaseAttributes, PurchaseCreationAttributes>
@@ -50,7 +50,7 @@ export class Purchase
   declare location: Location;
 
   declare description?: string;
-  declare invoiceNo?: string;
+  declare invoice_no?: string;
   declare totalPrice?: number;
 
   // timestamps
@@ -143,7 +143,7 @@ export const PurchaseFactory = (sequelize: Sequelize) => {
         allowNull: false,
         defaultValue: 'store',
       },
-      invoiceNo: {
+      invoice_no: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 0,
@@ -163,10 +163,11 @@ export const PurchaseFactory = (sequelize: Sequelize) => {
       tableName: 'purchases',
       sequelize,
       timestamps: false,
+
       indexes: [
         {
           unique: true,
-          fields: ['invoiceNo'],
+          fields: ['invoice_no'],
         },
       ],
     }

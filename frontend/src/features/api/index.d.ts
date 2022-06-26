@@ -29,13 +29,14 @@ export interface Product extends DraftProduct, CommonFields {
 }
 
 export interface DraftPurchase {
-  [k: string]: string | number;
+  [k: string]: any;
   quantity: string | number;
   unitCost: string | number;
   unitPrice: string | number;
   location: string;
   productId: string;
   supplierId: string;
+  isNewProduct?: boolean;
 }
 
 export interface Purchase extends DraftPurchase, CommonFields {

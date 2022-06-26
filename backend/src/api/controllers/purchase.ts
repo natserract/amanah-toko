@@ -40,8 +40,15 @@ async function purchases(req: Request, res: Response, next: NextFunction) {
 
 async function create(req: Request, res: Response) {
   try {
-    const { supplierId, productId, quantity, unitCost, unitPrice, description } =
-      req.body;
+    const {
+      supplierId,
+      productId,
+      quantity,
+      unitCost,
+      unitPrice,
+      description,
+      isNewProduct = false
+    } = req.body;
 
     const location = enumFromStringValue(Location, req.body.location) ?? Location.STORE
 
@@ -87,14 +94,18 @@ async function create(req: Request, res: Response) {
           location,
           description,
           totalPrice,
-          invoiceNo
+          invoice_no: invoiceNo
         },
         { transaction: t }
       );
 
       let { store } = product.dataValues!;
       if (location === 'store') {
-        store += quantity;
+        if (isNewProduct) {
+          store = quantity
+        } else {
+          store += quantity;
+        }
       }
 
       if (store < 0) {

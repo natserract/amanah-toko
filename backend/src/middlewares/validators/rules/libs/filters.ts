@@ -57,7 +57,7 @@ const sorting = [
     .optional({ checkFalsy: true })
     .trim()
     .escape()
-    .matches(/^[A-Za-z,\s]+$/)
+    .matches(/^[A-Za-z_,\s]+$/)
     .withMessage(
       'Sort must be a comma separated string of space separated column and order direction' +
         'e.g. "col1, col2 desc, col3 asc"'

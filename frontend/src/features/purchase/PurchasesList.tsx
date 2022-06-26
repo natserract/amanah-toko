@@ -39,7 +39,7 @@ export const PurchasesList = React.memo(() => {
     () => [
       {
         name: 'Invoice No',
-        accessor: 'invoiceNo',
+        accessor: 'invoice_no',
         link: "/purchases/:id",
         callback: (value: string) => `BILL-${value}`
       },
@@ -83,7 +83,8 @@ export const PurchasesList = React.memo(() => {
 
   const handleQuery = useCallback((query: string) => {
     if (query.length) {
-      setQuery(query);
+      const sortInvNoQuery = `?sort=invoice_no desc`
+      setQuery(`${sortInvNoQuery}&${query}`);
     }
   }, []);
 

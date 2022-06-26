@@ -56,7 +56,7 @@ async function create(req: Request, res: Response) {
       const invoiceNo = String(count + 1);
 
       const sale = await Sale.create(
-        { productId, quantity, totalPrice, description, invoiceNo },
+        { productId, quantity, totalPrice, description, invoice_no: invoiceNo },
         { transaction: t }
       );
       // deduct quantity items from product

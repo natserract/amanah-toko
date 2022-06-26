@@ -15,7 +15,7 @@ interface SaleAttributes {
   id: string;
   quantity: number;
   description?: string;
-  invoiceNo?: string;
+  invoice_no?: string;
   totalPrice?: number;
 
   // foreign key
@@ -24,7 +24,7 @@ interface SaleAttributes {
   createdAt?: Date | string | null | undefined;
 }
 
-type SaleCreationAttributes = Optional<SaleAttributes, 'id' | 'totalPrice' | 'invoiceNo'>;
+type SaleCreationAttributes = Optional<SaleAttributes, 'id' | 'totalPrice' | 'invoice_no'>;
 
 export class Sale
   extends Model<SaleAttributes, SaleCreationAttributes>
@@ -34,7 +34,7 @@ export class Sale
   declare quantity: number;
   declare description?: string;
 
-  declare invoiceNo?: string;
+  declare invoice_no?: string;
   declare totalPrice?: number;
 
   // timestamps
@@ -80,10 +80,9 @@ export const SaleFactory = (sequelize: Sequelize) => {
         unique: true,
         allowNull: false,
       },
-      invoiceNo: {
+      invoice_no: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
       },
       totalPrice: {
         type: DataTypes.INTEGER,
@@ -106,7 +105,7 @@ export const SaleFactory = (sequelize: Sequelize) => {
       indexes: [
         {
           unique: true,
-          fields: ['invoiceNo'],
+          fields: ['invoice_no'],
         },
       ],
     }

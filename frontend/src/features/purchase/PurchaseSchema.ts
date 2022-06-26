@@ -5,9 +5,10 @@ const PurchaseSchema = Yup.object({
     .typeError('Supplier is required')
     .required('Supplier is required'),
 
-  productId: Yup.string()
-    .typeError('Product is required')
-    .required('Product is required'),
+  isNewProduct:
+    Yup.boolean().default(false),
+
+  productId: Yup.string().notRequired(),
 
   quantity: Yup.number()
     .typeError('Quantity is required')
@@ -29,6 +30,15 @@ const PurchaseSchema = Yup.object({
   description: Yup.string()
     .min(5, 'Description should be at least 5 characters long')
     .max(255, 'Description should not exceed 255 characters'),
+
+  // :: Additional for new product
+  name: Yup.string()
+    .notRequired()
+    .min(2, 'Product name must be at least 2 characters long')
+    .max(50, 'Product name must not exceed 50 characters'),
+
+  categoryId: Yup.string()
+    .notRequired(),
 });
 
 export default PurchaseSchema;

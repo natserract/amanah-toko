@@ -99,12 +99,13 @@ export const purchaseRules = {
 
     queryWithFilter(
       'product',
-      async (productName) =>
-        await Product.findAll({
+      async (productName) => {
+        return await Product.findAll({
           where: {
             name: { [Op.like]: `%${productName}%` },
           },
         })
+      }
     ),
 
     ...filters,
