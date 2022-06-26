@@ -9,6 +9,7 @@ import CustomTooltip from './app/charts/CustomTooltip';
 import { useLazyGetSalesQuery } from './features/sale/salesSlice';
 import { useLazyGetPurchasesQuery } from './features/purchase/purchaseSlice';
 import { csvDownload } from './app/libs/csvParser';
+import { formatDate } from './utils/format';
 
 const centerSx = {
   display: 'flex',
@@ -205,8 +206,19 @@ const Dashboard = () => {
         purchasesData.purchases &&
         purchasesData.purchases.length > 0
       ) {
-        // TODO: need mapping values
-        csvDownload(purchasesData.purchases)
+        const purchases = purchasesData.purchases.map(purchase => {
+          return {
+            'No Invoice': purchase.invoice_no,
+            'Total Biaya': purchase.totalPrice ? toRupiah(+purchase.totalPrice) : "Rp.0",
+            'Nama Barang': purchase?.product?.name,
+            'Harga Beli Barang':
+            purchase?.product?.unitCost ? toRupiah(+purchase.product.unitCost) : "Rp.0",
+            'Jumlah Barang': purchase.quantity,
+            'Supplier': purchase?.supplier?.name,
+            'Tanggal': formatDate(purchase.createdAt),
+          }
+        })
+        csvDownload(purchases)
       }
     } catch (err) {
       console.log('Failed to download')
@@ -222,8 +234,18 @@ const Dashboard = () => {
         salesData.sales &&
         salesData.sales.length > 0
       ) {
-        // TODO: need mapping values
-        csvDownload(salesData.sales)
+        const sales = salesData.sales.map(sale => {
+          return {
+            'No Invoice': sale.invoice_no,
+            'Total Biaya': sale.totalPrice ? toRupiah(+sale.totalPrice) : "Rp.0",
+            'Nama Barang': sale?.product?.name,
+            'Harga Jual Barang':
+              sale?.product?.unitPrice ? toRupiah(+sale.product.unitPrice) : "Rp.0",
+            'Jumlah Barang': sale.quantity,
+            'Tanggal': formatDate(sale.createdAt),
+          }
+        })
+        csvDownload(sales)
       }
     } catch (err) {
       console.log('Failed to download')
