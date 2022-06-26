@@ -107,4 +107,5 @@ export const {
   useEditSaleMutation,
   useCancelSaleMutation,
   useDestroySaleMutation,
+  useLazyGetSalesQuery,
 } = saleApi;

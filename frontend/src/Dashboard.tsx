@@ -6,6 +6,9 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip, Responsive
 import { Reports } from './features/api';
 import { averageNum, numberFormat, toRupiah } from './utils/currency';
 import CustomTooltip from './app/charts/CustomTooltip';
+import { useLazyGetSalesQuery } from './features/sale/salesSlice';
+import { useLazyGetPurchasesQuery } from './features/purchase/purchaseSlice';
+import { csvDownload } from './app/libs/csvParser';
 
 const centerSx = {
   display: 'flex',
@@ -18,6 +21,7 @@ const ChartHeader = ({
   title,
   options,
   onChange,
+  onDownload,
 }: {
   title: string,
   options: {
@@ -25,6 +29,7 @@ const ChartHeader = ({
     value: string;
   }[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onDownload: (e: any) => void;
 }) => {
   const selectOptions = (() => {
     if (options?.length) {
@@ -54,9 +59,25 @@ const ChartHeader = ({
       padding: '0 15px',
     }}>
        <h3>{title}</h3>
-        <select name="filter" onChange={onChange}>
-          {selectOptions}
-        </select>
+
+       <div style={{
+        display: 'inline-flex',
+        alignItems: "center",
+       }}>
+          <select
+            className='btn btn-sm btn-dark'
+            name="filter"
+            onChange={onChange}
+            style={{
+              marginRight: 20,
+            }}
+          >
+            {selectOptions}
+          </select>
+          <button onClick={onDownload} className="btn btn-sm btn-outline-dark">
+            Download Laporan
+          </button>
+       </div>
     </div>
   )
 }
@@ -83,6 +104,14 @@ const Dashboard = () => {
 
   const salesByProductRef = useRef<Reports['sales']>([]);
   const [salesByProductChartData, setSalesByProductChartData] = useState<Reports['salesByProduct']>([])
+
+  const [triggerSales, {
+    data: salesData
+  }] = useLazyGetSalesQuery()
+
+  const [triggerPurchases, {
+    data: purchasesData
+  }] = useLazyGetPurchasesQuery()
 
   const applyChartData = useCallback(() => {
     const purchases = result.isSuccess
@@ -155,7 +184,6 @@ const Dashboard = () => {
         totalPrice(items),
         items?.length
       )
-      console.log('price', totalPrice(items))
       return toRupiah(price)
     }
 
@@ -170,9 +198,39 @@ const Dashboard = () => {
     }
   }, [result.data, result.data?.error]);
 
-  useEffect(() => {
-    console.log('purchasesChartData', purchasesChartData)
-  }, [purchasesChartData])
+  const handleDownloadPurchase = useCallback(() => {
+    try {
+      if (
+        purchasesData &&
+        purchasesData.purchases &&
+        purchasesData.purchases.length > 0
+      ) {
+        // TODO: need mapping values
+        csvDownload(purchasesData.purchases)
+      }
+    } catch (err) {
+      console.log('Failed to download')
+    }
+  }, [purchasesData])
+
+  useEffect(handleDownloadPurchase, [handleDownloadPurchase])
+
+  const handleDownloadSales= useCallback(() => {
+    try {
+      if (
+        salesData &&
+        salesData.sales &&
+        salesData.sales.length > 0
+      ) {
+        // TODO: need mapping values
+        csvDownload(salesData.sales)
+      }
+    } catch (err) {
+      console.log('Failed to download')
+    }
+  }, [salesData])
+
+  useEffect(handleDownloadSales, [handleDownloadSales])
 
   return (
     <div className="container-fluid pt-3">
@@ -202,6 +260,7 @@ const Dashboard = () => {
             const value = e.target.value
             setQuery(`?by=${value}`)
           }}
+          onDownload={() => triggerPurchases()}
         />
 
         <ResponsiveContainer width="100%" height={400}>
@@ -272,6 +331,7 @@ const Dashboard = () => {
             const value = e.target.value
             setQuery(`?by=${value}`)
           }}
+          onDownload={() => triggerSales()}
         />
 
         <ResponsiveContainer width="100%" height={400}>
@@ -337,6 +397,7 @@ const Dashboard = () => {
             const value = e.target.value
             setQuery(`?by=${value}`)
           }}
+          onDownload={() => triggerSales()}
         />
 
         <ResponsiveContainer width="100%" height={400}>

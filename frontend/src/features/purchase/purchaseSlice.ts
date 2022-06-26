@@ -101,6 +101,7 @@ export const purchaseApi = emptySplitApi.injectEndpoints({
 export const {
   useGetPurchasesQuery,
   useGetPurchaseQuery,
+  useLazyGetPurchasesQuery,
   useAddNewPurchaseMutation,
   useEditPurchaseMutation,
   useDestroyPurchaseMutation,

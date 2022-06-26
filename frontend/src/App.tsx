@@ -27,7 +27,13 @@ import {
   EditPurchaseForm,
   Invoice as InvoicePurchase
 } from './features/purchase';
-import { SalesList, AddSaleForm, EditSaleForm, Invoice as InvoiceSale } from './features/sale';
+import {
+  SalesList,
+  AddSaleForm,
+  EditSaleForm,
+  Invoice as InvoiceSale,
+  InvoiceToday as InvoiceTodaySale
+} from './features/sale';
 import {
   SuppliersList,
   AddSupplierForm,
