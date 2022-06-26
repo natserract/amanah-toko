@@ -12,3 +12,4 @@ node_modules
 /last-bundle-info.html
 /locales/**/*.missing.json
 /package-lock.json
+/release-builds

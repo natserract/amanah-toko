@@ -1,4 +1,4 @@
-import { app, session, shell } from 'electron';
+import { app, session } from 'electron';
 import logger from 'electron-log';
 import { isMainWindow, openBoxHero } from './window';
 import { isMac } from './envs';
@@ -7,7 +7,6 @@ import { initWindowIPC } from './ipc/initWindowIPC';
 import { initViewEvents, updateViewState } from './utils/manageViewState';
 import { initLocale } from './initLocale';
 import { initUpdateIPC } from './ipc/initUpdateIPC';
-import { IPC_MESSAGES } from './utils/message';
 
 // unhandled error도 catch 한다.
 logger.catchErrors();
