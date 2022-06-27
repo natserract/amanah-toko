@@ -6,6 +6,9 @@ import { SaleFactory } from './sale.js';
 import { SupplierFactory } from './supplier.js';
 import { TransferFactory } from './transfer.js';
 import { Db, Models } from './types';
+import 'dotenv/config';
+
+const env = process.env.NODE_ENV as 'development' | 'test' | 'production';
 
 // eslint-disable-next-line no-var
 var models: any = {
@@ -27,7 +30,12 @@ export const initModel = async (withoutSync = false) => {
 
   if (!withoutSync) {
     await sequelize.sync({
-      alter: true
+      // alter: true
+      ...(env == "development" ? {
+        alter: true
+      } : {
+        force: true
+      })
     })
   }
 };
