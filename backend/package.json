@@ -52,5 +52,9 @@
     "sequelize-cli": "^6.2.0",
     "ts-node": "^10.4.0",
     "tsc-alias": "1.6.9"
+  },
+  "engines": {
+    "npm": "8.5.0",
+    "node": "16.14.2"
   }
 }

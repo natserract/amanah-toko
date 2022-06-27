@@ -54,7 +54,7 @@
     "build": "rm -rf out && yarn run compile",
     "release": "yarn run clean && yarn run compile && electron-builder --mac --windows --publish always",
     "release-package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=build/icon.icns --prune=true --out=release-builds --version-string.ProductName='Amanah Toko'",
-    "release-package:win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=build/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Amanah Toko'"
+    "release-package:win": "electron-packager . amanah-toko --overwrite --asar=true --platform=win32 --arch=ia32 --icon=build/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Amanah Toko'"
   },
   "repository": {
     "type": "git",
