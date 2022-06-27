@@ -32,7 +32,7 @@ export const initPool = async () => {
   const app = express();
   const port = normalizePort(process.env.PORT || '5000');
   app.set('port', port);
-  app.set('host', appHost);
+  // app.set('host', appHost);
 
   const server = http.createServer(app);
   server.listen(port, () => {
