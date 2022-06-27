@@ -5,7 +5,8 @@
   "author": "martin",
   "license": "MIT",
   "scripts": {
-    "start": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && node dist/src/app.js",
+    "start": "node dist/src/app.js",
+    "start:dev": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && node dist/src/app.js",
     "build": "rm -rf dist && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "preserve": "yarn run build",
     "serve": "concurrently \"tsc --watch\" \"nodemon ./dist/src/app.js\"",
