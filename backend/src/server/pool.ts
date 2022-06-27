@@ -69,8 +69,8 @@ export const initPool = async () => {
     })
   );
   app.use(
-    '/static',
-    express.static(path.join(__dirname, '..', 'build', 'static'))
+    '/',
+    express.static(path.join(__dirname, 'heroku'))
   );
   app.use('/api/v1', router);
 
