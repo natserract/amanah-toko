@@ -29,14 +29,15 @@ export const initModel = async (withoutSync = false) => {
   });
 
   if (!withoutSync) {
-    await sequelize.sync({
-      // alter: true
-      ...(env == "development" ? {
-        alter: true
-      } : {
-        force: true
-      })
-    })
+    // await sequelize.sync({
+    //   // alter: true
+    //   ...(env == "development" ? {
+    //     alter: true
+    //   } : {
+    //     force: true
+    //   })
+    // })
+    await sequelize.sync()
   }
 };
 
